@@ -1,0 +1,41 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion app.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion app.minSdkVersion
+        targetSdkVersion app.targetSdkVersion
+        versionCode app.versionCode
+        versionName app.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "com.aqrlei.litelog.engine.ILogEngine", "logger",
+                "com.aqrlei.litelog.LogHelper.module(\"${project.name}\")"
+        
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation deps.kotlin.stdlib
+    implementation deps.android.appcompat
+    implementation deps.android.viewpager2
+    implementation deps.android.constraintlayout
+    implementation deps.aqrlei.litelog
+
+}
+
+apply from: rootProject.file("gradle/bintray_upload.gradle")

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="BannerView">
+        <!--宽高比-->
+        <attr name="widthHeightRatio" format="string" />
+        <!--是否开启自动轮播-->
+        <attr name="isAuto" format="boolean" />
+        <!--轮播间隔-->
+        <attr name="interval" format="integer" />
+        <attr name="banner_can_loop" format="boolean" />
+        <attr name="banner_indicator_checked_color" format="color" />
+        <attr name="banner_indicator_normal_color" format="color" />
+        <attr name="banner_indicator_normal_width" format="dimension" />
+        <attr name="banner_indicator_checked_width" format="dimension" />
+        <attr name="banner_indicator_gap" format="dimension" />
+        <attr name="banner_indicator_height" format="dimension" />
+        <attr name="banner_reveal_width" format="dimension" />
+        <attr name="banner_indicator_marginStart" format="dimension" />
+        <attr name="banner_indicator_marginTop" format="dimension" />
+        <attr name="banner_indicator_marginEnd" format="dimension" />
+        <attr name="banner_indicator_marginBottom" format="dimension" />
+        <attr name="banner_use_ratio" format="boolean" />
+
+        <attr name="banner_indicator_style" format="enum">
+            <enum name="CIRCLE" value="0" />
+            <enum name="DASH" value="1" />
+            <enum name="ROUND_RECT" value="2" />
+        </attr>
+        <attr name="banner_indicator_slide_mode" format="enum">
+            <enum name="NORMAL" value="0" />
+            <enum name="SMOOTH" value="1" />
+            <enum name="WORM" value="2" />
+        </attr>
+
+        <attr name="banner_indicator_gravity" format="enum">
+            <enum name="CENTER" value="0" />
+            <enum name="START" value="1" />
+            <enum name="END" value="2" />
+            <enum name="BIAS" value="3" />
+        </attr>
+        <attr name="banner_indicator_position" format="enum">
+            <enum name="INSIDE" value="0" />
+            <enum name="BELOW" value="1" />
+        </attr>
+        <attr name="banner_indicator_bias" format="float" />
+        <attr name="banner_vertical_indicator_bias" format="float" />
+
+        <attr name="banner_offset_page_limit" format="integer" />
+        <attr name="banner_scroll_duration" format="integer" />
+
+        <attr name="banner_transformer_style" format="enum">
+            <enum name="NONE" value="0" />
+            <enum name="SCALE_IN" value="1" />
+            <enum name="DEPTH" value="2" />
+            <enum name="STACK" value="3" />
+            <enum name="ACCORDION" value="4" />
+            <enum name="ROTATE" value="5" />
+            <enum name="ZOOM_OUT" value="6" />
+            <enum name="MULTI" value="7" />
+            <enum name="MULTI_OVERLAP" value="8" />
+        </attr>
+
+        <attr name="banner_transformer_scale" format="float" />
+
+        <attr name="banner_indicator_visibility" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="4" />
+            <enum name="gone" value="8" />
+        </attr>
+
+    </declare-styleable>
+
+
+    <declare-styleable name="BannerView2">
+        <!--宽高比-->
+        <attr name="widthHeightRatio" />
+        <!--是否开启自动轮播-->
+        <attr name="isAuto" />
+        <!--轮播间隔-->
+        <attr name="interval" />
+        <attr name="banner_can_loop" />
+        <attr name="banner_indicator_checked_color" />
+        <attr name="banner_indicator_normal_color" />
+        <attr name="banner_indicator_normal_width" />
+        <attr name="banner_indicator_checked_width" />
+        <attr name="banner_indicator_gap" />
+        <attr name="banner_indicator_height" />
+        <attr name="banner_reveal_width" />
+        <attr name="banner_indicator_marginStart" />
+        <attr name="banner_indicator_marginTop" />
+        <attr name="banner_indicator_marginEnd" />
+        <attr name="banner_indicator_marginBottom" />
+        <attr name="banner_use_ratio" />
+        <attr name="banner_indicator_style" />
+        <attr name="banner_indicator_slide_mode" />
+        <attr name="banner_indicator_gravity" />
+        <attr name="banner_indicator_position" />
+        <attr name="banner_indicator_bias" />
+        <attr name="banner_vertical_indicator_bias" />
+        <attr name="banner_offset_page_limit" />
+        <attr name="banner_transformer_style" />
+        <attr name="banner_transformer_scale" />
+        <attr name="banner_indicator_visibility" />
+    </declare-styleable>
+</resources>

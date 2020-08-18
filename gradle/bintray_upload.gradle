@@ -1,0 +1,112 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+apply plugin: 'org.jetbrains.dokka'
+
+dokka {
+    outputFormat = "javadoc"
+    outputDirectory = "$buildDir/documentation"
+    //配置方式一
+    configuration {
+        noJdkLink = true
+        noStdlibLink = true
+        noAndroidSdkLink = true
+        skipDeprecated = true // Do not output deprecated members
+        reportUndocumented = true // Emit warnings about not documented members.
+        skipEmptyPackages = true // Do not create index pages for empty packages
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.source
+    archiveClassifier.set('sources')
+}
+
+task dokkaJar(type: Jar, dependsOn: dokka) {
+    from dokka.outputDirectory
+    archiveClassifier.set('javadoc')
+}
+
+tasks.withType(Javadoc) {//防止编码问题
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId 'com.aqrlei.lib'
+                artifactId app.artifactId
+                version app.versionName
+
+                artifact(sourcesJar)
+                artifact(dokkaJar)
+
+                pom {
+                    name = app.artifactId
+                    packaging 'aar'
+                    description = app.desc
+                    url = app.url
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'AqrLei'
+                            name = 'AqrLei'
+                            email = 'aqrdeveloper@gmail.com'
+                        }
+                    }
+                    scm {
+                        connection = app.connection
+                        developerConnection = app.developerConnection
+                        url = app.url
+                    }
+                }
+            }
+
+        }
+
+        repositories {
+            maven {
+                url = "$rootProject.rootDir/repo"
+            }
+        }
+    }
+
+    bintray {
+        user = properties.getProperty("bintray.user")
+        key = properties.getProperty("bintray.key")
+        publications = ['release']
+
+        publish = true //[Default: false] Whether version should be auto published after an upload
+
+        pkg {
+            repo = "lib"
+            name = app.artifactId
+            licenses = ['Apache-2.0']
+            websiteUrl = app.url
+            vcsUrl = app.vcsUrl
+
+            publicDownloadNumbers = true
+
+            githubRepo = app.gihubRepo
+            githubReleaseNotesFile = 'README.md'
+
+            version {
+                name = app.versionName
+                desc = app.versionName
+                released = new Date()
+                vcsTag = app.versionName
+            }
+        }
+    }
+}
