@@ -20,13 +20,12 @@ ext {
 
             versionCode       : 1000000,
             versionName       : "1.0.0",
-            artifactId        : "bannerbiew",
+            artifactId        : "bannerview",
             desc              : "android's ui widget",
             url               : "https://github.com/AqrLei/BannerView",
             vcsUrl            : "https://github.com/AqrLei/BannerView.git",
             connection        : "scm:git:git://github.com:AqrLei/BannerView.git",
             dveloperConnection: "scm:git:ssh://github.com:AqrLei/BannerView.git",
-            githubRepo        : "AqrLei/BannerView",
     ]
 
     android = [

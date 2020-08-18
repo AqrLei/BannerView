@@ -87,6 +87,7 @@ afterEvaluate {
         key = properties.getProperty("bintray.key")
         publications = ['release']
 
+        override = true
         publish = true //[Default: false] Whether version should be auto published after an upload
 
         pkg {
@@ -97,9 +98,6 @@ afterEvaluate {
             vcsUrl = app.vcsUrl
 
             publicDownloadNumbers = true
-
-            githubRepo = app.gihubRepo
-            githubReleaseNotesFile = 'README.md'
 
             version {
                 name = app.versionName
