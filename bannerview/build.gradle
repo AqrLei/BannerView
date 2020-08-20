@@ -20,6 +20,10 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += ['-module-name',"${app.groupId}.${app.artifactId}"]
+    }
+
     buildTypes {
         release {
             minifyEnabled false

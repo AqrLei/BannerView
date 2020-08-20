@@ -40,7 +40,7 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                groupId 'com.aqrlei.lib'
+                groupId app.groupId
                 artifactId app.artifactId
                 version app.versionName
 
