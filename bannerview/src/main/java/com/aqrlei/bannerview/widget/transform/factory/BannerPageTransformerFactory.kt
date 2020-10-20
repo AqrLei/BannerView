@@ -1,8 +1,8 @@
-package com.aqrlei.bannerview.widget.banner2.transform.factory
+package com.aqrlei.bannerview.widget.transform.factory
 
 import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.widget.enums.TransformerStyle
-import com.aqrlei.bannerview.widget.banner2.transform.*
+import com.aqrlei.bannerview.widget.transform.*
 
 /**
  * created by AqrLei on 2020/4/23

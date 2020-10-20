@@ -5,10 +5,10 @@ import android.content.res.TypedArray
 import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
+import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.widget.R
 import com.aqrlei.bannerview.widget.enums.*
 import com.aqrlei.bannerview.widget.options.BannerOptions
-import com.aqrlei.bannerview.widget.options.DEFAULT_SCROLL_DURATION
 import com.aqrlei.bannerview.widget.utils.BannerUtils
 
 /**
@@ -35,88 +35,96 @@ class AttributeController(private val bannerOptions: BannerOptions) {
 
     private fun initIndicatorAttrs(typedArray: TypedArray) {
         with(typedArray) {
-            bannerOptions
-                .also {
-                    it.indicatorGravity = IndicatorGravity.values()[getInt(
-                        R.styleable.BannerView_banner_indicator_gravity, 0)]
+            bannerOptions.indicatorOptions {
+                checkedColor = getColor(
+                    R.styleable.BannerView_banner_indicator_checked_color,
+                    defaultCheckedColor
+                )
+                normalColor = getColor(
+                    R.styleable.BannerView_banner_indicator_normal_color,
+                    defaultNormalColor
+                )
+                normalIndicatorWidth = getDimension(
+                    R.styleable.BannerView_banner_indicator_normal_width,
+                    BannerUtils.dp2px(8f))
+                indicatorStyle = IndicatorStyle.values()[(getInt(
+                    R.styleable.BannerView_banner_indicator_style,
+                    0))]
 
-                    it.indicatorPosition = IndicatorPosition.values()[getInt(
-                        R.styleable.BannerView_banner_indicator_position, 0)]
-                    if (it.indicatorGravity == IndicatorGravity.BIAS) {
-                        it.indicatorGravityBias =
-                            getFloat(R.styleable.BannerView_banner_indicator_bias, 0.5F)
-                    }
-                    it.indicatorVerticalBias = getFloat(R.styleable.BannerView_banner_vertical_indicator_bias,1.0F)
-                    it.indicatorVisibility =
-                        getInt(R.styleable.BannerView_banner_indicator_visibility, View.VISIBLE)
+                slideMode = IndicatorSlideMode.values()[getInt(
+                    R.styleable.BannerView_banner_indicator_slide_mode,
+                    0)]
 
-                    val indicatorMarginStart = getDimension(
-                        R.styleable.BannerView_banner_indicator_marginStart,
-                        BannerOptions.IndicatorMargin.defaultMargin.toFloat())
-                    val indicatorMarginTop =
-                        getDimension(
-                            R.styleable.BannerView_banner_indicator_marginTop,
-                            BannerOptions.IndicatorMargin.defaultMargin.toFloat())
-                    val indicatorMarginEnd =
-                        getDimension(
-                            R.styleable.BannerView_banner_indicator_marginEnd,
-                            BannerOptions.IndicatorMargin.defaultMargin.toFloat())
-                    val indicatorMarginBottom =
-                        getDimension(
-                            R.styleable.BannerView_banner_indicator_marginBottom,
-                            BannerOptions.IndicatorMargin.defaultMargin.toFloat())
-                    it.indicatorMargin.paramChange {
-                        start = indicatorMarginStart.toInt()
-                        top = indicatorMarginTop.toInt()
-                        end = indicatorMarginEnd.toInt()
-                        bottom = indicatorMarginBottom.toInt()
-                    }
-                    it.bannerUseRatio = getBoolean(R.styleable.BannerView_banner_use_ratio, false)
-                    if (it.bannerUseRatio) {
-                        it.widthHeightRatio =
-                            getString(R.styleable.BannerView_widthHeightRatio) ?: ""
-                    }
-                }
-                .indicatorOptions {
-                    checkedColor = getColor(
-                        R.styleable.BannerView_banner_indicator_checked_color,
-                        defaultCheckedColor)
-                    normalColor = getColor(
-                        R.styleable.BannerView_banner_indicator_normal_color,
-                        defaultNormalColor)
-                    normalIndicatorWidth = getDimension(
-                        R.styleable.BannerView_banner_indicator_normal_width,
-                        BannerUtils.dp2px(8f))
-                    indicatorStyle = IndicatorStyle.values()[(getInt(
-                        R.styleable.BannerView_banner_indicator_style,
-                        0))]
-
-                    slideMode = IndicatorSlideMode.values()[getInt(
-                        R.styleable.BannerView_banner_indicator_slide_mode,
-                        0)]
-
-                    indicatorGap = getDimension(
-                        R.styleable.BannerView_banner_indicator_gap,
-                        normalIndicatorWidth).toInt()
-                    sliderHeight = getDimension(
-                        R.styleable.BannerView_banner_indicator_height,
-                        normalIndicatorWidth / 2)
-                    checkedIndicatorWidth = getDimension(
-                        R.styleable.BannerView_banner_indicator_checked_width, normalIndicatorWidth)
-                }
+                indicatorGap = getDimension(
+                    R.styleable.BannerView_banner_indicator_gap,
+                    normalIndicatorWidth).toInt()
+                sliderHeight = getDimension(
+                    R.styleable.BannerView_banner_indicator_height,
+                    normalIndicatorWidth / 2)
+                checkedIndicatorWidth = getDimension(
+                    R.styleable.BannerView_banner_indicator_checked_width,
+                    normalIndicatorWidth)
+            }
         }
     }
 
     private fun initBannerAttrs(typedArray: TypedArray) {
         typedArray.let {
             bannerOptions.apply {
-                widthHeightRatio = it.getString(R.styleable.BannerView_widthHeightRatio) ?: ""
+                indicatorGravity = IndicatorGravity.values()[it.getInt(
+                    R.styleable.BannerView_banner_indicator_gravity, 0)]
+                indicatorPosition = IndicatorPosition.values()[it.getInt(
+                    R.styleable.BannerView_banner_indicator_position, 0)]
+
+                if (indicatorGravity == IndicatorGravity.BIAS) {
+                    indicatorGravityBias =
+                        it.getFloat(R.styleable.BannerView_banner_indicator_bias, 0.5F)
+                }
+                indicatorVerticalBias = it.getFloat(R.styleable.BannerView_banner_vertical_indicator_bias,1.0F)
+
+                indicatorVisibility =
+                    it.getInt(R.styleable.BannerView_banner_indicator_visibility, View.VISIBLE)
+
+                val indicatorMarginStart = it.getDimension(
+                    R.styleable.BannerView_banner_indicator_marginStart,
+                    BannerOptions.IndicatorMargin.defaultMargin.toFloat())
+                val indicatorMarginTop =
+                    it.getDimension(
+                        R.styleable.BannerView_banner_indicator_marginTop,
+                        BannerOptions.IndicatorMargin.defaultMargin.toFloat())
+                val indicatorMarginEnd =
+                    it.getDimension(
+                        R.styleable.BannerView_banner_indicator_marginEnd,
+                        BannerOptions.IndicatorMargin.defaultMargin.toFloat())
+                val indicatorMarginBottom =
+                    it.getDimension(
+                        R.styleable.BannerView_banner_indicator_marginBottom,
+                        BannerOptions.IndicatorMargin.defaultMargin.toFloat())
+                indicatorMargin.paramChange {
+                    start = indicatorMarginStart.toInt()
+                    top = indicatorMarginTop.toInt()
+                    end = indicatorMarginEnd.toInt()
+                    bottom = indicatorMarginBottom.toInt()
+                }
+                bannerUseRatio = it.getBoolean(R.styleable.BannerView_banner_use_ratio, false)
+                if (bannerUseRatio) {
+                    widthHeightRatio =
+                        it.getString(R.styleable.BannerView_widthHeightRatio) ?: ""
+                }
                 interval = it.getInteger(R.styleable.BannerView_interval, DEFAULT_INTERVAL)
                 isAutoPlay = it.getBoolean(R.styleable.BannerView_isAuto, true)
                 isCanLoop = it.getBoolean(R.styleable.BannerView_banner_can_loop, true)
-                scrollDuration = it.getInt(
-                    R.styleable.BannerView_banner_scroll_duration,
-                    DEFAULT_SCROLL_DURATION)
+                revealWidth = it.getDimension(R.styleable.BannerView_banner_reveal_width, 0f)
+                transformerStyle = TransformerStyle.values()[it.getInt(
+                    R.styleable.BannerView_banner_transformer_style,
+                    0)]
+
+                offsetPageLimit = it.getInt(
+                    R.styleable.BannerView_banner_offset_page_limit,
+                    ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT)
+
+                transformerScale =
+                    it.getFloat(R.styleable.BannerView_banner_transformer_scale, 0.85F)
             }
         }
     }

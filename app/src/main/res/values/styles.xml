@@ -7,4 +7,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="BannerStyle">
+        <item name="banner_use_ratio">true</item>
+        <item name="widthHeightRatio">375:255</item>
+        <item name="banner_can_loop">true</item>
+    </style>
+
 </resources>

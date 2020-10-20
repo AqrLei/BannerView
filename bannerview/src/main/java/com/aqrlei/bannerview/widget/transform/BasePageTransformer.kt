@@ -1,4 +1,4 @@
-package com.aqrlei.bannerview.widget.banner2.transform
+package com.aqrlei.bannerview.widget.transform
 
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2

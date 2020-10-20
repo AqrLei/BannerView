@@ -70,37 +70,4 @@
         </attr>
 
     </declare-styleable>
-
-
-    <declare-styleable name="BannerView2">
-        <!--宽高比-->
-        <attr name="widthHeightRatio" />
-        <!--是否开启自动轮播-->
-        <attr name="isAuto" />
-        <!--轮播间隔-->
-        <attr name="interval" />
-        <attr name="banner_can_loop" />
-        <attr name="banner_indicator_checked_color" />
-        <attr name="banner_indicator_normal_color" />
-        <attr name="banner_indicator_normal_width" />
-        <attr name="banner_indicator_checked_width" />
-        <attr name="banner_indicator_gap" />
-        <attr name="banner_indicator_height" />
-        <attr name="banner_reveal_width" />
-        <attr name="banner_indicator_marginStart" />
-        <attr name="banner_indicator_marginTop" />
-        <attr name="banner_indicator_marginEnd" />
-        <attr name="banner_indicator_marginBottom" />
-        <attr name="banner_use_ratio" />
-        <attr name="banner_indicator_style" />
-        <attr name="banner_indicator_slide_mode" />
-        <attr name="banner_indicator_gravity" />
-        <attr name="banner_indicator_position" />
-        <attr name="banner_indicator_bias" />
-        <attr name="banner_vertical_indicator_bias" />
-        <attr name="banner_offset_page_limit" />
-        <attr name="banner_transformer_style" />
-        <attr name="banner_transformer_scale" />
-        <attr name="banner_indicator_visibility" />
-    </declare-styleable>
 </resources>

@@ -29,8 +29,12 @@ dependencies {
     implementation deps.android.ktx
     implementation deps.android.appcompat
     implementation deps.android.constraintlayout
+    implementation deps.android.viewpager2
+    implementation deps.android.material
     testImplementation deps.junit
     androidTestImplementation deps.android.junit_ext
     androidTestImplementation deps.android.espresso
+
+    implementation project(":bannerview")
 
 }

@@ -1,4 +1,4 @@
-package com.aqrlei.bannerview.widget.banner2.transform
+package com.aqrlei.bannerview.widget.transform
 
 import android.view.View
 
@@ -7,8 +7,7 @@ import android.view.View
  */
 private const val MIN_SCALE = 0.85F
 private const val CENTER_SCALE = 0.5F
-
-class ScaleInOverlapTransformer(private val minScale: Float = MIN_SCALE) : BasePageTransformer() {
+class ScaleInTransformer(private val minScale: Float = MIN_SCALE) : BasePageTransformer() {
     override fun onPreTransform(page: View, position: Float) {
         with(page) {
             pivotY = height / 2F
@@ -18,6 +17,7 @@ class ScaleInOverlapTransformer(private val minScale: Float = MIN_SCALE) : BaseP
 
     override fun onTransformOffScreenLeft(page: View, position: Float) {
         with(page) {
+            scaleX = minScale
             scaleY = minScale
             pivotX = width.toFloat()
         }
@@ -26,6 +26,7 @@ class ScaleInOverlapTransformer(private val minScale: Float = MIN_SCALE) : BaseP
     override fun onTransformOffScreenRight(page: View, position: Float) {
         with(page) {
             pivotX = 0f
+            scaleX = minScale
             scaleY = minScale
         }
     }
@@ -34,6 +35,7 @@ class ScaleInOverlapTransformer(private val minScale: Float = MIN_SCALE) : BaseP
         super.onTransformMoveToLeft(page, position)
         with(page) {
             val scaleFactor: Float = (1 + position) * (1 - minScale) + minScale
+            scaleX = scaleFactor
             scaleY = scaleFactor
             pivotX = width * (CENTER_SCALE + CENTER_SCALE * -position)
         }
@@ -43,6 +45,7 @@ class ScaleInOverlapTransformer(private val minScale: Float = MIN_SCALE) : BaseP
         super.onTransformMoveToRight(page, position)
         with(page) {
             val scaleFactor: Float = (1 - position) * (1 - minScale) + minScale
+            page.scaleX = scaleFactor
             page.scaleY = scaleFactor
             page.pivotX = width * ((1 - position) * CENTER_SCALE)
         }
