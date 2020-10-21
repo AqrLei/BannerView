@@ -112,8 +112,8 @@ class AttributeController(private val bannerOptions: BannerOptions) {
                         it.getString(R.styleable.BannerView_widthHeightRatio) ?: ""
                 }
                 interval = it.getInteger(R.styleable.BannerView_interval, DEFAULT_INTERVAL)
-                isAutoPlay = it.getBoolean(R.styleable.BannerView_isAuto, true)
-                isCanLoop = it.getBoolean(R.styleable.BannerView_banner_can_loop, true)
+                isAutoPlay = it.getBoolean(R.styleable.BannerView_isAuto, false)
+                isCanLoop = it.getBoolean(R.styleable.BannerView_banner_can_loop, false)
                 revealWidth = it.getDimension(R.styleable.BannerView_banner_reveal_width, 0f)
                 transformerStyle = TransformerStyle.values()[it.getInt(
                     R.styleable.BannerView_banner_transformer_style,

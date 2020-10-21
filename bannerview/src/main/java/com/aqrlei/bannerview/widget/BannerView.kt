@@ -106,14 +106,15 @@ class BannerView @JvmOverloads constructor(
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
 
-        val itemCount = adapter?.bannerPagerAdapter?.itemCount ?: 0
+        val itemCount = adapter?.getRealItemCount() ?: 0
+        val realCanLoop = isCanLoop && itemCount > 1
         val canIntercept = viewPager2.isUserInputEnabled || itemCount > 1
         if (!canIntercept) {
             return super.onInterceptTouchEvent(ev)
         }
 
         when(ev?.action) {
-            MotionEvent.ACTION_DOWN -> parent.requestDisallowInterceptTouchEvent(viewPager2.currentItem < itemCount -1 || isCanLoop)
+            MotionEvent.ACTION_DOWN -> parent.requestDisallowInterceptTouchEvent(viewPager2.currentItem < itemCount -1 || realCanLoop)
 
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> parent.requestDisallowInterceptTouchEvent(false)
         }
