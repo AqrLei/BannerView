@@ -3,6 +3,9 @@ package com.aqrlei.bannerview.widget.options
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.widget.enums.*
+import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
+import com.aqrlei.bannerview.widget.indicator.enums.IndicatorStyle
+import com.aqrlei.bannerview.widget.indicator.options.IndicatorOptions
 import com.aqrlei.bannerview.widget.utils.BannerUtils
 
 /**
@@ -32,8 +35,8 @@ class BannerOptions {
     var isLooping: Boolean = false
     var isCanLoop: Boolean = false
     var isAutoPlay: Boolean = false
-    var indicatorGravity: IndicatorGravity = IndicatorGravity.CENTER
-    var indicatorPosition: IndicatorPosition = IndicatorPosition.INSIDE
+    var bannerIndicatorGravity: BannerIndicatorGravity = BannerIndicatorGravity.CENTER
+    var bannerIndicatorPosition: BannerIndicatorPosition = BannerIndicatorPosition.INSIDE
     var indicatorGravityBias: Float = 0.5F
         get() = when {
             field < 0 -> 0F

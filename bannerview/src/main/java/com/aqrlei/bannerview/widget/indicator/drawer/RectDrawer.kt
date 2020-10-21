@@ -1,8 +1,8 @@
 package com.aqrlei.bannerview.widget.indicator.drawer
 
 import android.graphics.Canvas
-import com.aqrlei.bannerview.widget.enums.IndicatorSlideMode
-import com.aqrlei.bannerview.widget.options.IndicatorOptions
+import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
+import com.aqrlei.bannerview.widget.indicator.options.IndicatorOptions
 
 /**
  * created by AqrLei on 2019-12-11

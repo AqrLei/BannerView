@@ -8,6 +8,7 @@ import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.widget.R
 import com.aqrlei.bannerview.widget.enums.*
+import com.aqrlei.bannerview.widget.indicator.enums.*
 import com.aqrlei.bannerview.widget.options.BannerOptions
 import com.aqrlei.bannerview.widget.utils.BannerUtils
 
@@ -71,12 +72,12 @@ class AttributeController(private val bannerOptions: BannerOptions) {
     private fun initBannerAttrs(typedArray: TypedArray) {
         typedArray.let {
             bannerOptions.apply {
-                indicatorGravity = IndicatorGravity.values()[it.getInt(
+                bannerIndicatorGravity = BannerIndicatorGravity.values()[it.getInt(
                     R.styleable.BannerView_banner_indicator_gravity, 0)]
-                indicatorPosition = IndicatorPosition.values()[it.getInt(
+                bannerIndicatorPosition = BannerIndicatorPosition.values()[it.getInt(
                     R.styleable.BannerView_banner_indicator_position, 0)]
 
-                if (indicatorGravity == IndicatorGravity.BIAS) {
+                if (bannerIndicatorGravity == BannerIndicatorGravity.BIAS) {
                     indicatorGravityBias =
                         it.getFloat(R.styleable.BannerView_banner_indicator_bias, 0.5F)
                 }

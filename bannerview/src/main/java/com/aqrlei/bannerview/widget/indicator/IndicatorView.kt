@@ -3,8 +3,9 @@ package com.aqrlei.bannerview.widget.indicator
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import com.aqrlei.bannerview.widget.indicator.base.BaseIndicatorView
 import com.aqrlei.bannerview.widget.indicator.drawer.DrawerProxy
-import com.aqrlei.bannerview.widget.options.IndicatorOptions
+import com.aqrlei.bannerview.widget.indicator.options.IndicatorOptions
 
 /**
  * created by AqrLei on 2019-12-12
@@ -14,9 +15,10 @@ class IndicatorView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0) : BaseIndicatorView(context, attrs, defStyleAttr) {
 
-    private val drawerProxy: DrawerProxy = DrawerProxy(indicatorOptions)
+    private val drawerProxy: DrawerProxy = DrawerProxy(mIndicatorOptions)
 
-    override fun onIndicatorOptionsSet(options: IndicatorOptions) {
+    override fun setIndicatorOptions(options: IndicatorOptions) {
+        super.setIndicatorOptions(options)
         drawerProxy.setIndicatorOptions(options)
     }
 
@@ -35,4 +37,5 @@ class IndicatorView @JvmOverloads constructor(
         super.onLayout(changed, left, top, right, bottom)
         drawerProxy.onLayout(changed, left, top, right, bottom)
     }
+
 }

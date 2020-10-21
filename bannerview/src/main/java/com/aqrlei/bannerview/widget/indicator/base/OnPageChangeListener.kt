@@ -1,9 +1,9 @@
-package com.aqrlei.bannerview.widget.page
+package com.aqrlei.bannerview.widget.indicator.base
 
 /**
  * created by AqrLei on 2020/5/11
  */
-interface OnBannerPageChangeListener {
+interface OnPageChangeListener {
 
     fun onPageSelected(position: Int)
 

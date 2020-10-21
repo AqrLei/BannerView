@@ -3,7 +3,7 @@ package com.aqrlei.bannerview.widget.indicator.drawer
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import com.aqrlei.bannerview.widget.options.IndicatorOptions
+import com.aqrlei.bannerview.widget.indicator.options.IndicatorOptions
 
 /**
  * created by AqrLei on 2019-12-11

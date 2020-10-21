@@ -17,26 +17,14 @@ enum class TransformerStyle {
     MULTI_OVERLAP;
 }
 
-enum class IndicatorGravity {
+enum class BannerIndicatorGravity {
     CENTER,
     START,
     END,
     BIAS;
 }
 
-enum class IndicatorPosition {
+enum class BannerIndicatorPosition {
     INSIDE,
     BELOW;
-}
-
-enum class IndicatorSlideMode {
-    NORMAL,
-    SMOOTH,
-    WORM;
-}
-
-enum class IndicatorStyle {
-    CIRCLE,
-    DASH,
-    ROUND_RECT;
 }

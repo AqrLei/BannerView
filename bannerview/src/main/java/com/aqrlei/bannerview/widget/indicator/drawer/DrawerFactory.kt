@@ -1,7 +1,7 @@
 package com.aqrlei.bannerview.widget.indicator.drawer
 
-import com.aqrlei.bannerview.widget.enums.IndicatorStyle
-import com.aqrlei.bannerview.widget.options.IndicatorOptions
+import com.aqrlei.bannerview.widget.indicator.enums.IndicatorStyle
+import com.aqrlei.bannerview.widget.indicator.options.IndicatorOptions
 
 /**
  * created by AqrLei on 2019-12-11

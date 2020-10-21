@@ -4,26 +4,21 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.widget.BuildConfig.logger
 import com.aqrlei.bannerview.widget.adapter.Adapter
-import com.aqrlei.bannerview.widget.enums.IndicatorGravity
-import com.aqrlei.bannerview.widget.enums.IndicatorPosition
+import com.aqrlei.bannerview.widget.enums.BannerIndicatorGravity
+import com.aqrlei.bannerview.widget.enums.BannerIndicatorPosition
 import com.aqrlei.bannerview.widget.enums.TransformerStyle
-import com.aqrlei.bannerview.widget.indicator.IIndicator
+import com.aqrlei.bannerview.widget.indicator.base.IIndicator
 import com.aqrlei.bannerview.widget.indicator.IndicatorView
-import com.aqrlei.bannerview.widget.utils.BannerUtils
 import com.aqrlei.bannerview.widget.manager.BannerManager
 import com.aqrlei.bannerview.widget.transform.factory.BannerPageTransformerFactory
-import com.aqrlei.bannerview.widget.viewholder.ViewHolder
 
 /**
  * created by AqrLei on 2020/4/23
@@ -104,6 +99,7 @@ class BannerView @JvmOverloads constructor(
         stopLoop()
     }
 
+    //TODO 目前是有问题的
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
 
         val itemCount = adapter?.getRealItemCount() ?: 0
@@ -192,7 +188,7 @@ class BannerView @JvmOverloads constructor(
             startToStart = LayoutParams.PARENT_ID
             topToTop = LayoutParams.PARENT_ID
             endToEnd = LayoutParams.PARENT_ID
-            if (bannerManager.bannerOptions.indicatorPosition == IndicatorPosition.BELOW) {
+            if (bannerManager.bannerOptions.bannerIndicatorPosition == BannerIndicatorPosition.BELOW) {
                 bottomToTop = indicatorLayout.id
                 verticalChainStyle = LayoutParams.CHAIN_PACKED
             } else {
@@ -205,7 +201,7 @@ class BannerView @JvmOverloads constructor(
             LayoutParams(0, LayoutParams.WRAP_CONTENT).apply {
                 startToStart = LayoutParams.PARENT_ID
                 endToEnd = LayoutParams.PARENT_ID
-                if (bannerManager.bannerOptions.indicatorPosition == IndicatorPosition.BELOW) {
+                if (bannerManager.bannerOptions.bannerIndicatorPosition == BannerIndicatorPosition.BELOW) {
                     topToBottom = viewPager2.id
                 } else {
                     topToTop = LayoutParams.PARENT_ID
@@ -250,9 +246,11 @@ class BannerView @JvmOverloads constructor(
                 customIndicator = indicatorView !is IndicatorView
             }
 
-            indicatorView?.indicatorOptions = bannerManager.bannerOptions.indicatorOptions
-            indicatorView?.setPageSize(it.getRealItemCount())
+            indicatorView?.setIndicatorOptions(bannerManager.bannerOptions.indicatorOptions.also { indicatorOptions ->
+                indicatorOptions.pageSize = it.getRealItemCount()
+            })
             initIndicator()
+            indicatorView?.notifyChanged()
         }
     }
 
@@ -275,11 +273,11 @@ class BannerView @JvmOverloads constructor(
                         lp.topMargin = indicatorMargin.top
                         lp.marginEnd = indicatorMargin.end
                         lp.bottomMargin = indicatorMargin.bottom
-                        lp.horizontalBias = when (bannerManager.bannerOptions.indicatorGravity) {
-                            IndicatorGravity.START -> 0F
-                            IndicatorGravity.CENTER -> 0.5F
-                            IndicatorGravity.END -> 1.0F
-                            IndicatorGravity.BIAS -> bannerManager.bannerOptions.indicatorGravityBias
+                        lp.horizontalBias = when (bannerManager.bannerOptions.bannerIndicatorGravity) {
+                            BannerIndicatorGravity.START -> 0F
+                            BannerIndicatorGravity.CENTER -> 0.5F
+                            BannerIndicatorGravity.END -> 1.0F
+                            BannerIndicatorGravity.BIAS -> bannerManager.bannerOptions.indicatorGravityBias
                         }
                     })
             }

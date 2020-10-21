@@ -1,8 +1,8 @@
-package com.aqrlei.bannerview.widget.options
+package com.aqrlei.bannerview.widget.indicator.options
 
 import android.graphics.Color
-import com.aqrlei.bannerview.widget.enums.IndicatorSlideMode
-import com.aqrlei.bannerview.widget.enums.IndicatorStyle
+import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
+import com.aqrlei.bannerview.widget.indicator.enums.IndicatorStyle
 import com.aqrlei.bannerview.widget.utils.BannerUtils
 
 /**
@@ -12,24 +12,24 @@ class IndicatorOptions {
 
     var customIndicator: Boolean = false
 
-    var indicatorStyle = IndicatorStyle.DASH
+    var indicatorStyle = IndicatorStyle.ROUND_RECT
+
+    var slideMode = IndicatorSlideMode.NORMAL
 
     var pageSize: Int = 0
 
-    var normalColor: Int = Color.parseColor("#8C18171C")
-
-    var checkedColor: Int = Color.parseColor("#8C6C6D72")
+    var currentPosition: Int = 0
 
     var indicatorGap: Int = 0
 
     var slideProgress: Float = 0F
 
-    var currentPosition: Int = 0
-
     var sliderHeight: Float = 0F
         get() = if (field > 0) field else normalIndicatorWidth / 2
 
-    var slideMode = IndicatorSlideMode.NORMAL
+    var normalColor: Int = Color.parseColor("#8C18171C")
+
+    var checkedColor: Int = Color.parseColor("#8C6C6D72")
 
     var normalIndicatorWidth: Float = BannerUtils.dp2px(8F)
 
