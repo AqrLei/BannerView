@@ -7,8 +7,8 @@ import com.aqrlei.bannerview.widget.indicator.options.IndicatorOptions
 /**
  * created by AqrLei on 2019-12-11
  */
-open class RectDrawer internal constructor(indicatorOptions: IndicatorOptions)
-    : BaseDrawer(indicatorOptions) {
+open class RectDrawer internal constructor(indicatorOptions: IndicatorOptions) :
+    BaseDrawer(indicatorOptions) {
 
     override fun measureHeight(): Int {
         return indicatorOptions.sliderHeight.toInt()
@@ -16,18 +16,16 @@ open class RectDrawer internal constructor(indicatorOptions: IndicatorOptions)
 
     override fun onDrawIndicator(canvas: Canvas, pageSize: Int) {
         if (checkWidthEqual() && indicatorOptions.slideMode != IndicatorSlideMode.NORMAL) {
-            drawUncheckedSlide(canvas)
+            drawUncheckedSlide(canvas, pageSize)
             drawCheckedSlider(canvas)
         } else {
-            for (i in 0 until pageSize) {
-                drawUnEqual(canvas, i)
-            }
+            drawUnEqual(canvas, pageSize)
         }
     }
 
-    private fun drawUncheckedSlide(canvas: Canvas) {
+    private fun drawUncheckedSlide(canvas: Canvas, pageSize: Int) {
         mPaint.color = indicatorOptions.normalColor
-        for (i in 0 until indicatorOptions.pageSize) {
+        for (i in 0 until pageSize) {
             val sliderHeight = indicatorOptions.sliderHeight
             val left = i * (maxWidth + indicatorOptions.indicatorGap) + (maxWidth - minWidth)
             val right = left + minWidth
@@ -41,8 +39,7 @@ open class RectDrawer internal constructor(indicatorOptions: IndicatorOptions)
         when (indicatorOptions.slideMode) {
             IndicatorSlideMode.SMOOTH -> drawSmoothSlider(canvas)
             IndicatorSlideMode.WORM -> drawWormSlider(canvas)
-            else -> {
-            }
+            IndicatorSlideMode.NORMAL -> { }
         }
     }
 
@@ -72,30 +69,16 @@ open class RectDrawer internal constructor(indicatorOptions: IndicatorOptions)
         drawRoundRect(canvas, sliderHeight, sliderHeight)
     }
 
-    private fun drawUnEqual(canvas: Canvas, position: Int) {
-        val normalColor = indicatorOptions.normalColor
-        val indicatorGap = indicatorOptions.indicatorGap
-        val sliderHeight = indicatorOptions.sliderHeight
-        val currentPosition = indicatorOptions.currentPosition
-        when {
-            position < currentPosition -> {
-                mPaint.color = normalColor
-                val left = position * (minWidth + indicatorGap)
-                rectF.set(left, 0F, left + minWidth, sliderHeight)
-                drawRoundRect(canvas, sliderHeight, sliderHeight)
-            }
-            position == currentPosition -> {
-                mPaint.color = indicatorOptions.checkedColor
-                val left = position * (minWidth + indicatorGap)
-                rectF.set(left, 0F, left + maxWidth, sliderHeight)
-                drawRoundRect(canvas, sliderHeight, sliderHeight)
-            }
-            else -> {
-                mPaint.color = normalColor
-                val left = position * (minWidth + indicatorGap) + maxWidth - minWidth
-                rectF.set(left, 0F, left + minWidth, sliderHeight)
-                drawRoundRect(canvas, sliderHeight, sliderHeight)
-            }
+    private fun drawUnEqual(canvas: Canvas, pageSize: Int) {
+        val isChecked = { position : Int   -> position == indicatorOptions.currentPosition }
+        var left = 0F
+        for (position in 0 until pageSize) {
+            val sliderWidth = if (isChecked(position)) maxWidth else minWidth
+            mPaint.color = if (isChecked(position)) indicatorOptions.checkedColor else indicatorOptions.normalColor
+            val right = if (isChecked(position)) left + minWidth else left + maxWidth
+            rectF.set(left, 0F, right, indicatorOptions.sliderHeight)
+            drawRoundRect(canvas, indicatorOptions.sliderHeight, indicatorOptions.sliderHeight)
+            left += sliderWidth +indicatorOptions.indicatorGap
         }
     }
 

@@ -10,8 +10,19 @@
         android:id="@+id/bvBanner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:isAuto="true"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <Button
+        android:id="@+id/btnRefresh"
+        android:text="refresh"
+        style="@android:style/Widget.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/rgIndicator"
+        />
     <RadioGroup
         android:id="@+id/rgIndicator"
         android:layout_width="0dp"

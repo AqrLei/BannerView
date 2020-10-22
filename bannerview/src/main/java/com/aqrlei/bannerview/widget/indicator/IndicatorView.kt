@@ -22,6 +22,11 @@ class IndicatorView @JvmOverloads constructor(
         drawerProxy.setIndicatorOptions(options)
     }
 
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        drawerProxy.onLayout(changed, left, top, right, bottom)
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val measureResult = drawerProxy.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -33,9 +38,9 @@ class IndicatorView @JvmOverloads constructor(
         canvas?.let { drawerProxy.onDraw(canvas) }
     }
 
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
-        drawerProxy.onLayout(changed, left, top, right, bottom)
+    override fun notifyChanged() {
+        drawerProxy.setIndicatorOptions(mIndicatorOptions)
+        super.notifyChanged()
     }
 
 }

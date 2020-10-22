@@ -11,10 +11,9 @@ import com.aqrlei.bannerview.widget.indicator.options.IndicatorOptions
 abstract class BaseDrawer(protected var indicatorOptions: IndicatorOptions) : IDrawer {
 
     protected val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    protected val measureResult = IDrawer.MeasureResult()
+    private val measureResult = IDrawer.MeasureResult()
 
     protected val rectF = RectF()
-
 
     protected var maxWidth: Float = 0F
     protected var minWidth: Float = 0F
@@ -39,6 +38,7 @@ abstract class BaseDrawer(protected var indicatorOptions: IndicatorOptions) : ID
     }
 
     protected open fun measureHeight(): Int {
+        // 圆点的时候， 长宽相等
         return maxWidth.toInt()
     }
 

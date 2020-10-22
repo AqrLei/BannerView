@@ -11,7 +11,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.sample.R
 import com.aqrlei.bannerview.sample.holder.SimpleBannerViewHolder
 import com.aqrlei.bannerview.widget.BannerView
-import com.aqrlei.bannerview.widget.adapter.Adapter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_pager_indicator.*
 
@@ -23,9 +22,9 @@ class IndicatorFragment : Fragment() {
         fun create() = IndicatorFragment()
     }
 
-
-    private val bannerItemArray =
-        arrayOf(Color.GREEN, Color.MAGENTA, Color.BLUE, Color.CYAN, Color.RED)
+    private val bannerItemArray = ArrayList<Int>().also {
+        it.addAll(arrayOf(Color.GREEN, Color.MAGENTA, Color.BLUE, Color.CYAN, Color.RED))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,24 +35,27 @@ class IndicatorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bvBanner.adapter =
-           Adapter(SimpleBannerViewHolder(bannerItemArray)).also { adapter ->
-                adapter.pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
-                    override fun onPageSelected(position: Int) {
-                        super.onPageSelected(position)
-                        Log.d(BannerView.TAG, "position $position was selected")
-                    }
+        with(bvBanner) {
+            pageChangeCallback =  object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    Log.d(BannerView.TAG, "position $position was selected")
                 }
-                adapter.pageClickCallback = object : Adapter.OnPageClickCallback() {
-                    override fun onClick(view: View, position: Int) {
-                        Snackbar.make(
-                            bvBanner,
-                            "position $position was clicked",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-
             }
+            pageClickCallback = object : BannerView.OnPageClickCallback() {
+                override fun onClick(view: View, position: Int) {
+                    Snackbar.make(
+                        bvBanner,
+                        "position $position was clicked",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            setBannerViewHolder(SimpleBannerViewHolder(bannerItemArray))
+        }
+        btnRefresh.setOnClickListener {
+            bannerItemArray.add(Color.YELLOW)
+            bvBanner.refresh()
+        }
     }
 }
