@@ -523,4 +523,8 @@ class BannerView @JvmOverloads constructor(
     }
 
     internal class VH(view: View) : RecyclerView.ViewHolder(view)
+
+    class Test() {
+
+    }
 }
