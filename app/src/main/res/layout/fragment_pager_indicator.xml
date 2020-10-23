@@ -6,8 +6,8 @@
     android:orientation="vertical">
 
     <com.aqrlei.bannerview.widget.BannerView
-        style="@style/BannerStyle"
         android:id="@+id/bvBanner"
+        style="@style/BannerStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:isAuto="true"
@@ -16,13 +16,37 @@
 
     <Button
         android:id="@+id/btnRefresh"
-        android:text="refresh"
         style="@android:style/Widget.Button.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="refresh"
         app:layout_constraintBottom_toTopOf="@+id/rgIndicator"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rgIndicatorVisibility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnRefresh">
+
+        <RadioButton
+            android:id="@+id/rb1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="无指示器" />
+
+        <RadioButton
+            android:id="@+id/rb0"
+            android:checked="true"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="有指示器" />
+    </RadioGroup>
+
     <RadioGroup
         android:id="@+id/rgIndicator"
         android:layout_width="0dp"
@@ -32,23 +56,19 @@
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent">
 
-        <RadioButton
-            android:id="@+id/rb1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="无指示器" />
 
         <RadioButton
             android:id="@+id/rb2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="指示器在外部" />
+            android:checked="true"
+            android:text="指示器在内部" />
 
         <RadioButton
             android:id="@+id/rb3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="指示器在内部" />
+            android:text="指示器在外部" />
 
         <RadioButton
             android:id="@+id/rb4"
@@ -63,12 +83,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/rgIndicator"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rgIndicatorShape"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/rgIndicator">
 
         <RadioButton
             android:id="@+id/rbStyle1"
+            android:checked="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="normal" />
@@ -84,6 +105,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="worm" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rgIndicatorShape"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/rgIndicatorStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/rgIndicatorStyle">
+
+        <RadioButton
+            android:id="@+id/rbShape1"
+            android:checked="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="round" />
+
+        <RadioButton
+            android:id="@+id/rbShape2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="dash" />
+
+        <RadioButton
+            android:id="@+id/rbShape3"
+            android:checked="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="circle" />
 
     </RadioGroup>
 

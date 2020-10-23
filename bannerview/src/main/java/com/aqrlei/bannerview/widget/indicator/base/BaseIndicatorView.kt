@@ -60,7 +60,7 @@ abstract class BaseIndicatorView @JvmOverloads constructor(
     var slideProgress: Float
         get() = mIndicatorOptions.slideProgress
         private set(value) {
-            mIndicatorOptions.slideProgress = slideProgress
+            mIndicatorOptions.slideProgress = value
         }
 
     val slideMode: IndicatorSlideMode get() = mIndicatorOptions.slideMode

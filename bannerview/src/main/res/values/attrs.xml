@@ -33,18 +33,18 @@
             <enum name="WORM" value="2" />
         </attr>
 
-        <attr name="banner_indicator_gravity" format="enum">
+        <attr name="banner_indicator_child_gravity" format="enum">
             <enum name="CENTER" value="0" />
             <enum name="START" value="1" />
             <enum name="END" value="2" />
             <enum name="BIAS" value="3" />
         </attr>
-        <attr name="banner_indicator_position" format="enum">
+        <attr name="banner_indicator_parent_position" format="enum">
             <enum name="INSIDE" value="0" />
             <enum name="BELOW" value="1" />
         </attr>
-        <attr name="banner_indicator_bias" format="float" />
-        <attr name="banner_vertical_indicator_bias" format="float" />
+        <attr name="banner_indicator_child_bias" format="float" />
+        <attr name="banner_indicator_vertical_parent_bias" format="float" />
 
         <attr name="banner_offset_page_limit" format="integer" />
         <attr name="banner_scroll_duration" format="integer" />

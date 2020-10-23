@@ -36,7 +36,7 @@ class AttributeController(private val bannerOptions: BannerOptions) {
 
     private fun initIndicatorAttrs(typedArray: TypedArray) {
         with(typedArray) {
-            bannerOptions.indicatorOptions {
+            bannerOptions.indicatorOptions.run {  
                 checkedColor = getColor(
                     R.styleable.BannerView_banner_indicator_checked_color,
                     defaultCheckedColor
@@ -72,16 +72,16 @@ class AttributeController(private val bannerOptions: BannerOptions) {
     private fun initBannerAttrs(typedArray: TypedArray) {
         typedArray.let {
             bannerOptions.apply {
-                bannerIndicatorGravity = BannerIndicatorGravity.values()[it.getInt(
-                    R.styleable.BannerView_banner_indicator_gravity, 0)]
-                bannerIndicatorPosition = BannerIndicatorPosition.values()[it.getInt(
-                    R.styleable.BannerView_banner_indicator_position, 0)]
+                bannerIndicatorChildGravity = BannerIndicatorGravity.values()[it.getInt(
+                    R.styleable.BannerView_banner_indicator_child_gravity, 0)]
+                bannerIndicatorParentPosition = BannerIndicatorPosition.values()[it.getInt(
+                    R.styleable.BannerView_banner_indicator_parent_position, 0)]
 
-                if (bannerIndicatorGravity == BannerIndicatorGravity.BIAS) {
-                    indicatorGravityBias =
-                        it.getFloat(R.styleable.BannerView_banner_indicator_bias, 0.5F)
+                if (bannerIndicatorChildGravity == BannerIndicatorGravity.BIAS) {
+                    indicatorChildGravityBias =
+                        it.getFloat(R.styleable.BannerView_banner_indicator_child_bias, 0.5F)
                 }
-                indicatorVerticalBias = it.getFloat(R.styleable.BannerView_banner_vertical_indicator_bias,1.0F)
+                indicatorParentVerticalBias = it.getFloat(R.styleable.BannerView_banner_indicator_vertical_parent_bias,1.0F)
 
                 indicatorVisibility =
                     it.getInt(R.styleable.BannerView_banner_indicator_visibility, View.VISIBLE)

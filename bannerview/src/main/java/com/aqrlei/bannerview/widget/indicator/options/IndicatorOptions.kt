@@ -11,18 +11,22 @@ import com.aqrlei.bannerview.widget.utils.BannerUtils
 class IndicatorOptions {
 
     var customIndicator: Boolean = false
+        internal set
+
+    var pageSize: Int = 0
+        internal set
+
+    var currentPosition: Int = 0
+        internal set
+
+    var slideProgress: Float = 0F
+        internal set
 
     var indicatorStyle = IndicatorStyle.ROUND_RECT
 
     var slideMode = IndicatorSlideMode.NORMAL
 
-    var pageSize: Int = 0
-
-    var currentPosition: Int = 0
-
     var indicatorGap: Int = 0
-
-    var slideProgress: Float = 0F
 
     var sliderHeight: Float = 0F
         get() = if (field > 0) field else normalIndicatorWidth / 2

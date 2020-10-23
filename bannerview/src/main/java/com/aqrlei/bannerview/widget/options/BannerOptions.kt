@@ -12,14 +12,9 @@ import com.aqrlei.bannerview.widget.utils.BannerUtils
  * created by AqrLei on 2019-12-12
  */
 private const val MIN_SCALE = 0.85F
-const val DEFAULT_SCROLL_DURATION = 500
 
 class BannerOptions {
-
-    //仅在bannerView中的属性
-    var scrollDuration: Int = DEFAULT_SCROLL_DURATION
-
-    //仅在BannerView2中的属性
+    
     var transformerStyle: TransformerStyle = TransformerStyle.NONE
 
     //以下字段只有在transformerStyle 设置为MULTI, MULTI_OVERLAP,SCALE_IN才有效果
@@ -27,55 +22,52 @@ class BannerOptions {
 
     //以下字段只有在transformerStyle 设置为MULTI, MULTI_OVERLAP才有效果
     var offsetPageLimit: Int = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
+
     var revealWidth = BannerUtils.dp2px(20F)
 
 
-    //通用的属性
+    //自动轮播时间间隔
     var interval: Int = 0
+
+    // 是否正在自动循环播放
     var isLooping: Boolean = false
+
+    // 是否启用循环
     var isCanLoop: Boolean = false
+
+    // 是否启用自动轮播
     var isAutoPlay: Boolean = false
-    var bannerIndicatorGravity: BannerIndicatorGravity = BannerIndicatorGravity.CENTER
-    var bannerIndicatorPosition: BannerIndicatorPosition = BannerIndicatorPosition.INSIDE
-    var indicatorGravityBias: Float = 0.5F
-        get() = when {
-            field < 0 -> 0F
-            field > 1 -> 1F
-            else -> field
-        }
-
-    var indicatorVerticalBias: Float = 1.0F
-        get() = when {
-            field < 0 -> 0F
-            field > 1 -> 1F
-            else -> field
-        }
-
-
-    var indicatorMargin: IndicatorMargin = IndicatorMargin()
-    var indicatorVisibility: Int = View.VISIBLE
 
     //banner宽高比
     var bannerUseRatio: Boolean = false
+
     var widthHeightRatio: String = ""
+    
+    var bannerIndicatorChildGravity: BannerIndicatorGravity = BannerIndicatorGravity.CENTER
+
+    var indicatorChildGravityBias: Float = 0.5F
+        get() = when {
+            field < 0 -> 0F
+            field > 1 -> 1F
+            else -> field
+        }
+
+    var bannerIndicatorParentPosition: BannerIndicatorPosition = BannerIndicatorPosition.INSIDE
+
+    // 指示器在banner内部时， 在父容器垂直方向的Bias
+    var indicatorParentVerticalBias: Float = 1.0F
+        get() = when {
+            field < 0 -> 0F
+            field > 1 -> 1F
+            else -> field
+        }
+
+    var indicatorMargin: IndicatorMargin = IndicatorMargin()
+
+    var indicatorVisibility: Int = View.VISIBLE
+
     var indicatorOptions: IndicatorOptions = IndicatorOptions()
-
-    fun indicatorOptions(block: IndicatorOptions.() -> Unit) {
-        indicatorOptions.apply(block)
-    }
-
-    val indicatorNormalColor: Int get() = indicatorOptions.normalColor
-    val indicatorCheckedColor: Int get() = indicatorOptions.checkedColor
-    val normalIndicatorWidth: Float get() = indicatorOptions.normalIndicatorWidth
-    val checkedIndicatorWidth: Float get() = indicatorOptions.checkedIndicatorWidth
-    val indicatorStyle: IndicatorStyle get() = indicatorOptions.indicatorStyle
-    val slideMode: IndicatorSlideMode get() = indicatorOptions.slideMode
-    val indicatorGap: Int get() = indicatorOptions.indicatorGap
-    val indicatorHeight: Float get() = indicatorOptions.sliderHeight
-
-    fun indicatorMargin(block: IndicatorMargin.() -> Unit) {
-        indicatorMargin.paramChange(block)
-    }
+    internal set
 
     class IndicatorMargin(
         var start: Int = defaultMargin,

@@ -11,6 +11,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.sample.R
 import com.aqrlei.bannerview.sample.holder.SimpleBannerViewHolder
 import com.aqrlei.bannerview.widget.BannerView
+import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
+import com.aqrlei.bannerview.widget.indicator.enums.IndicatorStyle
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_pager_indicator.*
 
@@ -29,14 +31,15 @@ class IndicatorFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_pager_indicator, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(bvBanner) {
-            pageChangeCallback =  object : ViewPager2.OnPageChangeCallback() {
+            pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     Log.d(BannerView.TAG, "position $position was selected")
@@ -55,7 +58,70 @@ class IndicatorFragment : Fragment() {
         }
         btnRefresh.setOnClickListener {
             bannerItemArray.add(Color.YELLOW)
-            bvBanner.refresh()
+            bvBanner.notifyDataSetChanged()
+        }
+
+        rgIndicatorVisibility.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.rb1 -> {
+                    bvBanner.indicatorVisibility = View.GONE
+                }
+                R.id.rb0 -> {
+                    bvBanner.indicatorVisibility = View.VISIBLE
+                }
+            }
+        }
+
+        rgIndicator.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.rb2 -> {
+                }
+                R.id.rb3 -> {
+                }
+                R.id.rb4 -> {
+                }
+            }
+        }
+
+        rgIndicatorStyle.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+
+                R.id.rbStyle1 -> {
+                    bvBanner.setIndicatorOptions {
+                        slideMode = IndicatorSlideMode.NORMAL
+                    }
+                }
+                R.id.rbStyle2 -> {
+                    bvBanner.setIndicatorOptions {
+                        slideMode = IndicatorSlideMode.SMOOTH
+                    }
+                }
+                R.id.rbStyle3 -> {
+                    bvBanner.setIndicatorOptions {
+                        slideMode = IndicatorSlideMode.WORM
+                    }
+                }
+            }
+        }
+
+        rgIndicatorShape.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.rbShape1 -> {
+                    bvBanner.setIndicatorOptions {
+                        indicatorStyle = IndicatorStyle.ROUND_RECT
+                    }
+                }
+                R.id.rbShape2 -> {
+                    bvBanner.setIndicatorOptions {
+                        indicatorStyle = IndicatorStyle.DASH
+                    }
+                }
+                R.id.rbShape3 -> {
+                    bvBanner.setIndicatorOptions {
+                        indicatorStyle = IndicatorStyle.CIRCLE
+                    }
+                }
+            }
         }
     }
 }
