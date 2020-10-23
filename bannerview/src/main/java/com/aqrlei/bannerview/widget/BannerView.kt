@@ -131,6 +131,13 @@ class BannerView @JvmOverloads constructor(
             indicatorLayout.visibility = bannerManager.bannerOptions.indicatorVisibility
         }
 
+    var indicatorParentPosition: BannerIndicatorPosition
+    get() = bannerManager.bannerOptions.bannerIndicatorParentPosition
+    set(value) {
+        bannerManager.bannerOptions.bannerIndicatorParentPosition = value
+        refreshChildLayoutParams()
+    }
+
     init {
         bannerManager.initAttrs(context, attrs)
         inflate(context, R.layout.layout_banner_child, this)
@@ -200,6 +207,11 @@ class BannerView @JvmOverloads constructor(
         updateIndicator()
     }
 
+    fun setCustomIndicator(indicator: IIndicator?) {
+        indicatorView = indicator
+        refreshIndicator()
+    }
+
     //TODO
     fun setCurrentItem(item: Int) {
         bannerAdapter ?: return
@@ -232,7 +244,6 @@ class BannerView @JvmOverloads constructor(
             else -> tempNext
         }
     }
-
 
     /**
      * 设置BannerViewHolder， 开始初始化Banner

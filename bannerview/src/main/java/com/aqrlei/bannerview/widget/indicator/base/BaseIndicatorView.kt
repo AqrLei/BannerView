@@ -75,14 +75,17 @@ abstract class BaseIndicatorView @JvmOverloads constructor(
 
     fun refreshIndicatorOptions(block: IndicatorOptions.() -> Unit) {
         mIndicatorOptions.apply(block)
+        notifyChanged()
     }
 
     fun setupWithViewPager(viewPager: ViewPager?) {
         this.viewPager = viewPager
+        notifyChanged()
     }
 
     fun setupWithViewPager2(viewPager2: ViewPager2?) {
         this.viewPager2 = viewPager2
+        notifyChanged()
     }
 
     @CallSuper

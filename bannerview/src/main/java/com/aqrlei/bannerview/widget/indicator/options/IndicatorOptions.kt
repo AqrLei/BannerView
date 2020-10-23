@@ -10,6 +10,7 @@ import com.aqrlei.bannerview.widget.utils.BannerUtils
  */
 class IndicatorOptions {
 
+    //TODO
     var customIndicator: Boolean = false
         internal set
 
