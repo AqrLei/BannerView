@@ -416,6 +416,9 @@ class BannerView @JvmOverloads constructor(
     }
 
     private fun updateIndicator() {
+        if(isCustomIndicator) {
+            getIndicatorOptions().slideMode = IndicatorSlideMode.NORMAL
+        }
         indicatorView?.notifyChanged()
     }
 
