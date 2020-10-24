@@ -12,12 +12,4 @@ object BannerUtils {
     fun getRealPosition2(isCanLoop: Boolean, position: Int, pageSize: Int): Int {
         return if (pageSize == 0) 0 else (position + pageSize) % pageSize
     }
-
-    fun getLoopIndex(position: Int, pageSize: Int): Int {
-        return when {
-            position <= 0 -> 1
-            position >= pageSize -> pageSize
-            else -> position
-        }
-    }
 }

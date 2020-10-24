@@ -57,17 +57,15 @@ class BannerView @JvmOverloads constructor(
             bannerAdapter ?: return
             val listSize = bannerAdapter!!.getListSize()
             currentPosition = BannerUtils.getRealPosition2(isCanLoop, position, listSize)
-            val needResetCurrentItem =
-                listSize > 0 && isCanLoop && (position == 0 || position == MAX_VALUE - 1)
-            if (needResetCurrentItem) {
-                resetCurrentItem(currentPosition)
-            }
             indicatorView?.onPageSelected(currentPosition)
             pageChangeCallback?.onPageSelected(currentPosition)
         }
 
         override fun onPageScrollStateChanged(state: Int) {
             bannerAdapter ?: return
+            if(ViewPager2.SCROLL_STATE_IDLE == state ){
+                needResetCurrentItem()
+            }
             indicatorView?.onPageScrollStateChanged(state)
             pageChangeCallback?.onPageScrollStateChanged(state)
         }
@@ -397,13 +395,26 @@ class BannerView @JvmOverloads constructor(
         startAutoLoop()
     }
 
+    private fun needResetCurrentItem() {
+        val listSize = bannerAdapter!!.getListSize()
+        val position = viewPager2.currentItem
+        val curPosition = BannerUtils.getRealPosition2(isCanLoop, position, listSize)
+        val needResetCurrentItem =
+            listSize > 0 && isCanLoop && (position == 0 || position == MAX_VALUE - 1)
+        if (needResetCurrentItem) {
+            resetCurrentItem(curPosition)
+        }
+    }
     /**
      * 自动轮播到临界值或数据更新，重新设置当前位置page
      */
     private fun resetCurrentItem(item: Int) {
         bannerAdapter ?: return
         if (isCanLoop && bannerAdapter!!.getListSize() > 1) {
+            Log.d("AqrLei"," resetItem = $item, original=${bannerAdapter!!.getOriginalPosition()}")
             viewPager2.setCurrentItem(bannerAdapter!!.getOriginalPosition() + item, false)
+            Log.d("AqrLei"," curItem = ${viewPager2.currentItem}")
+
         } else {
             viewPager2.setCurrentItem(item, false)
         }
