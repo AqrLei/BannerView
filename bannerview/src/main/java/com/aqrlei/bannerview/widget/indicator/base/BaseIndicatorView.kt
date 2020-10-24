@@ -41,8 +41,6 @@ abstract class BaseIndicatorView @JvmOverloads constructor(
         }
     }
 
-    val isCustomIndicator: Boolean get() = mIndicatorOptions.customIndicator
-
     var pageSize: Int
         get() = mIndicatorOptions.pageSize
         private set(value) {
@@ -117,7 +115,7 @@ abstract class BaseIndicatorView @JvmOverloads constructor(
     }
 
     private fun pageSelected(position: Int) {
-        if (slideMode == IndicatorSlideMode.NORMAL || isCustomIndicator) {
+        if (slideMode == IndicatorSlideMode.NORMAL) {
             currentPosition = position
             slideProgress = 0f
             invalidate()
@@ -129,11 +127,7 @@ abstract class BaseIndicatorView @JvmOverloads constructor(
     }
 
     private fun pageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        if (slideMode in arrayOf(
-                IndicatorSlideMode.SMOOTH,
-                IndicatorSlideMode.WORM
-            ) && pageSize > 1 && positionOffset != 0F && !isCustomIndicator
-        ) {
+        if (slideMode != IndicatorSlideMode.NORMAL && pageSize > 1 && positionOffset != 0F) {
             if (position % pageSize == pageSize - 1) {
                 currentPosition = if (positionOffset < 0.5) position else 0
                 slideProgress = 0F

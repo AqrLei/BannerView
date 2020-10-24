@@ -17,7 +17,6 @@ import com.aqrlei.bannerview.widget.enums.TransformerStyle
 import com.aqrlei.bannerview.widget.indicator.IndicatorView
 import com.aqrlei.bannerview.widget.indicator.base.IIndicator
 import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
-import com.aqrlei.bannerview.widget.indicator.enums.IndicatorStyle
 import com.aqrlei.bannerview.widget.indicator.options.IndicatorOptions
 import com.aqrlei.bannerview.widget.manager.BannerManager
 import com.aqrlei.bannerview.widget.transform.factory.BannerPageTransformerFactory
@@ -46,6 +45,9 @@ class BannerView @JvmOverloads constructor(
     private val indicatorLayout: ConstraintLayout
     private val viewPager2: ViewPager2
 
+    var isCustomIndicator: Boolean = false
+        private set
+
     var currentPosition: Int = 0
     var pageChangeCallback: ViewPager2.OnPageChangeCallback? = null
     var pageClickCallback: OnPageClickCallback? = null
@@ -63,7 +65,7 @@ class BannerView @JvmOverloads constructor(
 
         override fun onPageScrollStateChanged(state: Int) {
             bannerAdapter ?: return
-            if(ViewPager2.SCROLL_STATE_IDLE == state ){
+            if (ViewPager2.SCROLL_STATE_IDLE == state) {
                 needResetCurrentItem()
             }
             indicatorView?.onPageScrollStateChanged(state)
@@ -130,11 +132,11 @@ class BannerView @JvmOverloads constructor(
         }
 
     var indicatorParentPosition: BannerIndicatorPosition
-    get() = bannerManager.bannerOptions.bannerIndicatorParentPosition
-    set(value) {
-        bannerManager.bannerOptions.bannerIndicatorParentPosition = value
-        refreshChildLayoutParams()
-    }
+        get() = bannerManager.bannerOptions.bannerIndicatorParentPosition
+        set(value) {
+            bannerManager.bannerOptions.bannerIndicatorParentPosition = value
+            refreshChildLayoutParams()
+        }
 
     init {
         bannerManager.initAttrs(context, attrs)
@@ -198,15 +200,19 @@ class BannerView @JvmOverloads constructor(
 
     }
 
-    fun getIndicatorOptions() : IndicatorOptions = bannerManager.bannerOptions.indicatorOptions
+    fun getIndicatorOptions(): IndicatorOptions = bannerManager.bannerOptions.indicatorOptions
 
-    fun setIndicatorOptions(block : IndicatorOptions.() ->Unit) {
+    fun setIndicatorOptions(block: IndicatorOptions.() -> Unit) {
         bannerManager.bannerOptions.indicatorOptions.apply(block)
         updateIndicator()
     }
 
     fun setCustomIndicator(indicator: IIndicator?) {
         indicatorView = indicator
+        if (null != indicator) {
+            isCustomIndicator = true
+            getIndicatorOptions().slideMode = IndicatorSlideMode.NORMAL
+        }
         refreshIndicator()
     }
 
@@ -307,40 +313,17 @@ class BannerView @JvmOverloads constructor(
         val isIndicatorBelow =
             bannerManager.bannerOptions.bannerIndicatorParentPosition == BannerIndicatorPosition.BELOW
         if (isIndicatorBelow) {
-            constraintSet.connect(
-                viewPager2.id,
-                ConstraintSet.BOTTOM,
-                indicatorLayout.id,
-                ConstraintSet.TOP
-            )
+            constraintSet.connect(viewPager2.id, ConstraintSet.BOTTOM, indicatorLayout.id, ConstraintSet.TOP)
         } else {
-            constraintSet.connect(
-                viewPager2.id,
-                ConstraintSet.BOTTOM,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.BOTTOM
-            )
+            constraintSet.connect(viewPager2.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
         }
 
         // indicator
         if (isIndicatorBelow) {
-            constraintSet.connect(
-                indicatorLayout.id,
-                ConstraintSet.TOP,
-                viewPager2.id,
-                ConstraintSet.BOTTOM
-            )
+            constraintSet.connect(indicatorLayout.id, ConstraintSet.TOP, viewPager2.id, ConstraintSet.BOTTOM)
         } else {
-            constraintSet.connect(
-                indicatorLayout.id,
-                ConstraintSet.TOP,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.TOP
-            )
-            constraintSet.setVerticalBias(
-                indicatorLayout.id,
-                bannerManager.bannerOptions.indicatorParentVerticalBias
-            )
+            constraintSet.connect(indicatorLayout.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+            constraintSet.setVerticalBias(indicatorLayout.id, bannerManager.bannerOptions.indicatorParentVerticalBias)
         }
 
         // 配置了使用宽高比
@@ -405,16 +388,14 @@ class BannerView @JvmOverloads constructor(
             resetCurrentItem(curPosition)
         }
     }
+
     /**
      * 自动轮播到临界值或数据更新，重新设置当前位置page
      */
     private fun resetCurrentItem(item: Int) {
         bannerAdapter ?: return
         if (isCanLoop && bannerAdapter!!.getListSize() > 1) {
-            Log.d("AqrLei"," resetItem = $item, original=${bannerAdapter!!.getOriginalPosition()}")
             viewPager2.setCurrentItem(bannerAdapter!!.getOriginalPosition() + item, false)
-            Log.d("AqrLei"," curItem = ${viewPager2.currentItem}")
-
         } else {
             viewPager2.setCurrentItem(item, false)
         }
@@ -425,7 +406,7 @@ class BannerView @JvmOverloads constructor(
      */
     private fun refreshIndicator() {
         setIndicatorValues()
-        bannerManager.bannerOptions.indicatorOptions.currentPosition =
+        getIndicatorOptions().currentPosition =
             BannerUtils.getRealPosition2(
                 isCanLoop,
                 viewPager2.currentItem,
@@ -443,7 +424,6 @@ class BannerView @JvmOverloads constructor(
             if (null == indicatorView) {
                 indicatorView = IndicatorView(context)
             }
-            bannerManager.bannerOptions.indicatorOptions.customIndicator = indicatorView !is IndicatorView
             bannerManager.bannerOptions.indicatorOptions.pageSize = it.getListSize()
             indicatorView?.setIndicatorOptions(bannerManager.bannerOptions.indicatorOptions)
             initIndicator()
@@ -534,8 +514,4 @@ class BannerView @JvmOverloads constructor(
     }
 
     internal class VH(view: View) : RecyclerView.ViewHolder(view)
-
-    class Test() {
-
-    }
 }

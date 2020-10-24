@@ -144,7 +144,5 @@ class IndicatorFragment : Fragment() {
                 }
             }
         }
-
-        BannerView.Test()
     }
 }
