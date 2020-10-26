@@ -1,10 +1,7 @@
 package com.aqrlei.bannerview.widget.options
 
-import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.widget.enums.*
-import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
-import com.aqrlei.bannerview.widget.indicator.enums.IndicatorStyle
 import com.aqrlei.bannerview.widget.indicator.options.IndicatorOptions
 import com.aqrlei.bannerview.widget.utils.BannerUtils
 
@@ -42,44 +39,14 @@ class BannerOptions {
     var bannerUseRatio: Boolean = false
 
     var widthHeightRatio: String = ""
-    
-    var bannerIndicatorChildGravity: BannerIndicatorGravity = BannerIndicatorGravity.CENTER
 
-    var indicatorChildGravityBias: Float = 0.5F
-        get() = when {
-            field < 0 -> 0F
-            field > 1 -> 1F
-            else -> field
-        }
-
-    var bannerIndicatorParentPosition: BannerIndicatorPosition = BannerIndicatorPosition.INSIDE
-
-    // 指示器在banner内部时， 在父容器垂直方向的Bias
-    var indicatorParentVerticalBias: Float = 1.0F
-        get() = when {
-            field < 0 -> 0F
-            field > 1 -> 1F
-            else -> field
-        }
-
-    var indicatorMargin: IndicatorMargin = IndicatorMargin()
-
-    var indicatorVisibility: Int = View.VISIBLE
 
     var indicatorOptions: IndicatorOptions = IndicatorOptions()
     internal set
 
-    class IndicatorMargin(
-        var start: Int = defaultMargin,
-        var top: Int = defaultMargin,
-        var end: Int = defaultMargin,
-        var bottom: Int = defaultMargin) {
-        companion object {
-            val defaultMargin = BannerUtils.dp2px(10F).toInt()
-        }
+    var bannerIndicatorParentOptions : BannerIndicatorParentOptions = BannerIndicatorParentOptions()
+    internal set
 
-        fun paramChange(block: IndicatorMargin.() -> Unit) {
-            this.apply(block)
-        }
-    }
+    var bannerIndicatorChildOptions: BannerIndicatorChildOptions = BannerIndicatorChildOptions()
+    internal set
 }

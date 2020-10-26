@@ -1,10 +1,8 @@
 package com.aqrlei.bannerview.widget.enums
 
 /**
- * created by AqrLei on 2019-12-11
+ * created by AqrLei on 2020/10/26
  */
-
-
 enum class TransformerStyle {
     NONE,
     SCALE_IN,
@@ -15,16 +13,4 @@ enum class TransformerStyle {
     ZOOM_OUT,
     MULTI,
     MULTI_OVERLAP;
-}
-
-enum class BannerIndicatorGravity {
-    CENTER,
-    START,
-    END,
-    BIAS;
-}
-
-enum class BannerIndicatorPosition {
-    INSIDE,
-    BELOW;
 }

@@ -2,7 +2,6 @@ package com.aqrlei.bannerview.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +18,9 @@ import com.aqrlei.bannerview.widget.indicator.base.IIndicator
 import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
 import com.aqrlei.bannerview.widget.indicator.options.IndicatorOptions
 import com.aqrlei.bannerview.widget.manager.BannerManager
+import com.aqrlei.bannerview.widget.options.BannerIndicatorChildOptions
+import com.aqrlei.bannerview.widget.options.BannerIndicatorParentOptions
+import com.aqrlei.bannerview.widget.options.BannerOptions
 import com.aqrlei.bannerview.widget.transform.factory.BannerPageTransformerFactory
 import com.aqrlei.bannerview.widget.utils.BannerUtils
 
@@ -93,49 +95,44 @@ class BannerView @JvmOverloads constructor(
 
     private val runnable = Runnable { handlePosition() }
 
-    var isCanLoop: Boolean = bannerManager.bannerOptions.isCanLoop
-        get() = bannerManager.bannerOptions.isCanLoop
+    var isCanLoop: Boolean = getBannerOptions().isCanLoop
+        get() = getBannerOptions().isCanLoop
         set(value) {
-            bannerManager.bannerOptions.isCanLoop = value
+            getBannerOptions().isCanLoop = value
             if (!field) {
-                bannerManager.bannerOptions.isAutoPlay = false
+                getBannerOptions().isAutoPlay = false
             }
-            field = bannerManager.bannerOptions.isCanLoop
+            field = getBannerOptions().isCanLoop
         }
     var isLooping
-        get() = bannerManager.bannerOptions.isLooping
+        get() = getBannerOptions().isLooping
         private set(value) {
-            bannerManager.bannerOptions.isLooping = value
+            getBannerOptions().isLooping = value
         }
     var isAutoPlay
-        get() = bannerManager.bannerOptions.isAutoPlay
+        get() = getBannerOptions().isAutoPlay
         set(value) {
-            bannerManager.bannerOptions.isAutoPlay = value
+            getBannerOptions().isAutoPlay = value
             if (value) {
-                bannerManager.bannerOptions.isCanLoop = true
+                getBannerOptions().isCanLoop = true
                 startAutoLoop()
             } else {
                 stopAutoLoop()
             }
         }
     var interval
-        get() = bannerManager.bannerOptions.interval
+        get() = getBannerOptions().interval
         set(value) {
-            bannerManager.bannerOptions.interval = value
+            getBannerOptions().interval = value
         }
 
     var indicatorVisibility: Int
-        get() = bannerManager.bannerOptions.indicatorVisibility
+        get() = getBannerIndicatorParentOptions().indicatorVisibility
         set(value) {
-            bannerManager.bannerOptions.indicatorVisibility = value
-            indicatorLayout.visibility = bannerManager.bannerOptions.indicatorVisibility
-        }
-
-    var indicatorParentPosition: BannerIndicatorPosition
-        get() = bannerManager.bannerOptions.bannerIndicatorParentPosition
-        set(value) {
-            bannerManager.bannerOptions.bannerIndicatorParentPosition = value
-            refreshChildLayoutParams()
+            if (indicatorVisibility != value) {
+                getBannerIndicatorParentOptions().indicatorVisibility = value
+                indicatorLayout.visibility = getBannerIndicatorParentOptions().indicatorVisibility
+            }
         }
 
     init {
@@ -143,12 +140,6 @@ class BannerView @JvmOverloads constructor(
         inflate(context, R.layout.layout_banner_child, this)
         viewPager2 = findViewById(R.id.viewPager2)
         indicatorLayout = findViewById(R.id.indicator)
-    }
-
-    fun logDebug(message: String) {
-        if (logEnable) {
-            Log.d(TAG, message)
-        }
     }
 
     override fun onAttachedToWindow() {
@@ -200,11 +191,28 @@ class BannerView @JvmOverloads constructor(
 
     }
 
-    fun getIndicatorOptions(): IndicatorOptions = bannerManager.bannerOptions.indicatorOptions
+    fun getBannerOptions(): BannerOptions = bannerManager.bannerOptions
+    fun getIndicatorOptions(): IndicatorOptions = getBannerOptions().indicatorOptions
+    fun getBannerIndicatorParentOptions(): BannerIndicatorParentOptions =
+        getBannerOptions().bannerIndicatorParentOptions
+
+    fun getBannerIndicatorChildOptions(): BannerIndicatorChildOptions =
+        getBannerOptions().bannerIndicatorChildOptions
 
     fun setIndicatorOptions(block: IndicatorOptions.() -> Unit) {
-        bannerManager.bannerOptions.indicatorOptions.apply(block)
+        getIndicatorOptions().apply(block)
         updateIndicator()
+    }
+
+    fun setBannerIndicatorParentOptions(block: BannerIndicatorParentOptions.() -> Unit) {
+        indicatorVisibility = getBannerIndicatorParentOptions().indicatorVisibility
+        getBannerIndicatorParentOptions().apply(block)
+        refreshChildLayoutParams()
+    }
+
+    fun setBannerIndicatorChildOptions(block: BannerIndicatorChildOptions.() -> Unit) {
+        getBannerIndicatorChildOptions().apply(block)
+        setIndicatorValues()
     }
 
     fun setCustomIndicator(indicator: IIndicator?) {
@@ -275,14 +283,14 @@ class BannerView @JvmOverloads constructor(
         currentPosition = 0
         with(viewPager2) {
             //MULTI
-            if (bannerManager.bannerOptions.transformerStyle in arrayOf(
+            if (getBannerOptions().transformerStyle in arrayOf(
                     TransformerStyle.MULTI,
                     TransformerStyle.MULTI_OVERLAP
                 )
             ) {
-                offscreenPageLimit = bannerManager.bannerOptions.offsetPageLimit
+                offscreenPageLimit = getBannerOptions().offsetPageLimit
                 (getChildAt(0) as? RecyclerView)?.apply {
-                    val padding = bannerManager.bannerOptions.revealWidth.toInt()
+                    val padding = getBannerOptions().revealWidth.toInt()
                     setPadding(padding, 0, padding, 0)
                     clipToPadding = false
                 }
@@ -291,8 +299,8 @@ class BannerView @JvmOverloads constructor(
             //PageTransformer
             setPageTransformer(
                 BannerPageTransformerFactory.createPageTransformer(
-                    bannerManager.bannerOptions.transformerStyle,
-                    bannerManager.bannerOptions.transformerScale
+                    getBannerOptions().transformerStyle,
+                    getBannerOptions().transformerScale
                 )
             )
             adapter = bannerAdapter
@@ -312,7 +320,7 @@ class BannerView @JvmOverloads constructor(
         constraintSet.clone(this)
         // viewpager2
         val isIndicatorBelow =
-            bannerManager.bannerOptions.bannerIndicatorParentPosition == BannerIndicatorPosition.BELOW
+            getBannerIndicatorParentOptions().bannerIndicatorParentPosition == BannerIndicatorPosition.BELOW
         if (isIndicatorBelow) {
             constraintSet.connect(
                 viewPager2.id,
@@ -346,13 +354,13 @@ class BannerView @JvmOverloads constructor(
             )
             constraintSet.setVerticalBias(
                 indicatorLayout.id,
-                bannerManager.bannerOptions.indicatorParentVerticalBias
+                getBannerIndicatorParentOptions().indicatorParentVerticalBias
             )
         }
 
         // 配置了使用宽高比
-        val bannerRatio = bannerManager.bannerOptions.widthHeightRatio
-        bannerRatio.takeIf { it.isNotBlank() && bannerManager.bannerOptions.bannerUseRatio }?.let {
+        val bannerRatio = getBannerOptions().widthHeightRatio
+        bannerRatio.takeIf { it.isNotBlank() && getBannerOptions().bannerUseRatio }?.let {
             constraintSet.setDimensionRatio(viewPager2.id, bannerRatio)
         }
 
@@ -451,42 +459,46 @@ class BannerView @JvmOverloads constructor(
             if (null == indicatorView) {
                 indicatorView = IndicatorView(context)
             }
-            bannerManager.bannerOptions.indicatorOptions.pageSize = it.getListSize()
-            indicatorView?.setIndicatorOptions(bannerManager.bannerOptions.indicatorOptions)
+
+            getIndicatorOptions().pageSize = it.getListSize()
+            indicatorView?.setIndicatorOptions(getIndicatorOptions())
             initIndicator()
             indicatorView?.notifyChanged()
         }
     }
 
     private fun initIndicator() {
-        indicatorLayout.visibility = bannerManager.bannerOptions.indicatorVisibility
+        indicatorLayout.visibility = getBannerIndicatorParentOptions().indicatorVisibility
         (indicatorView as? View)?.let {
+            if (it.id <= 0) {
+                it.id = R.id.indicatorChildView
+            }
             if (null == it.parent) {
                 indicatorLayout.removeAllViews()
-                it.layoutParams
-                indicatorLayout.addView(it,
-                    LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).also { lp ->
-                        lp.startToStart = LayoutParams.PARENT_ID
-                        lp.topToTop = LayoutParams.PARENT_ID
-                        lp.endToEnd = LayoutParams.PARENT_ID
-                        lp.bottomToBottom = LayoutParams.PARENT_ID
-
-                        val indicatorMargin = bannerManager.bannerOptions.indicatorMargin
-
-                        lp.marginStart = indicatorMargin.start
-                        lp.topMargin = indicatorMargin.top
-                        lp.marginEnd = indicatorMargin.end
-                        lp.bottomMargin = indicatorMargin.bottom
-                        lp.horizontalBias =
-                            when (bannerManager.bannerOptions.bannerIndicatorChildGravity) {
-                                BannerIndicatorGravity.START -> 0F
-                                BannerIndicatorGravity.CENTER -> 0.5F
-                                BannerIndicatorGravity.END -> 1.0F
-                                BannerIndicatorGravity.BIAS -> bannerManager.bannerOptions.indicatorChildGravityBias
-                            }
-                    })
+                indicatorLayout.addView(it, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
             }
+            refreshIndicatorLayoutParams()
         }
+    }
+
+    private fun refreshIndicatorLayoutParams() {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(indicatorLayout)
+        val horizontalBias =  when (getBannerIndicatorChildOptions().indicatorChildGravity) {
+            BannerIndicatorGravity.START -> 0F
+            BannerIndicatorGravity.CENTER -> 0.5F
+            BannerIndicatorGravity.END -> 1.0F
+            BannerIndicatorGravity.BIAS -> getBannerIndicatorChildOptions().indicatorChildGravityBias
+        }
+        val indicatorMargin = getBannerIndicatorChildOptions().indicatorChildMargin
+
+        constraintSet.connect(R.id.indicatorChildView, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START,indicatorMargin.start)
+        constraintSet.connect(R.id.indicatorChildView, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP,indicatorMargin.top)
+        constraintSet.connect(R.id.indicatorChildView, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END,indicatorMargin.end)
+        constraintSet.connect(R.id.indicatorChildView, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM,indicatorMargin.bottom)
+
+        constraintSet.setHorizontalBias(R.id.indicatorChildView, horizontalBias)
+        constraintSet.applyTo(indicatorLayout)
     }
 
     /**

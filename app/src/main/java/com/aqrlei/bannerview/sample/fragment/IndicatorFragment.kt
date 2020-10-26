@@ -7,12 +7,12 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.TypedArrayUtils
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.sample.R
 import com.aqrlei.bannerview.sample.holder.SimpleBannerViewHolder
 import com.aqrlei.bannerview.widget.BannerView
+import com.aqrlei.bannerview.widget.enums.BannerIndicatorGravity
 import com.aqrlei.bannerview.widget.enums.BannerIndicatorPosition
 import com.aqrlei.bannerview.widget.indicator.FigureIndicatorView
 import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
@@ -112,10 +112,24 @@ class IndicatorFragment : Fragment() {
         rgIndicator.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 R.id.rb2 -> {
-                    bvBanner.indicatorParentPosition = BannerIndicatorPosition.INSIDE
+                    bvBanner.setBannerIndicatorParentOptions {
+                        bannerIndicatorParentPosition = BannerIndicatorPosition.INSIDE
+                        indicatorParentVerticalBias = 0.9F
+                    }
+                    bvBanner.setBannerIndicatorChildOptions {
+                        indicatorChildGravity = BannerIndicatorGravity.END
+                        indicatorChildMargin.top = 0
+                    }
                 }
                 R.id.rb3 -> {
-                    bvBanner.indicatorParentPosition = BannerIndicatorPosition.BELOW
+                    bvBanner.setBannerIndicatorParentOptions {
+                        bannerIndicatorParentPosition = BannerIndicatorPosition.BELOW
+                    }
+                    bvBanner.setBannerIndicatorChildOptions {
+                        indicatorChildGravity = BannerIndicatorGravity.BIAS
+                        indicatorChildGravityBias = 0.8F
+                        indicatorChildMargin.top = dp6 *4
+                    }
                 }
             }
         }
