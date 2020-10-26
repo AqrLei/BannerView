@@ -210,30 +210,31 @@ class BannerView @JvmOverloads constructor(
     fun setCustomIndicator(indicator: IIndicator?) {
         indicatorView = indicator
         if (null != indicator) {
-            isCustomIndicator = true
             getIndicatorOptions().slideMode = IndicatorSlideMode.NORMAL
         }
+        isCustomIndicator = null != indicator
         refreshIndicator()
     }
 
-    //TODO
     fun setCurrentItem(item: Int) {
         bannerAdapter ?: return
+        stopAutoLoop()
         val checkCanLoop = isCanLoop && bannerAdapter!!.getListSize() > 1
         val index = if (checkCanLoop) getLoopItemIndex(item) else item
         viewPager2.currentItem = index
+        startAutoLoop()
 
     }
 
-    //TODO
     fun setCurrentItem(item: Int, smoothScroll: Boolean) {
         bannerAdapter ?: return
+        stopAutoLoop()
         val checkCanLoop = isCanLoop && bannerAdapter!!.getListSize() > 1
         val index = if (checkCanLoop) getLoopItemIndex(item) else item
         viewPager2.setCurrentItem(index, smoothScroll)
+        startAutoLoop()
     }
 
-    //TODO
     private fun getLoopItemIndex(item: Int): Int {
         val currentItem = viewPager2.currentItem
         val listSize = bannerAdapter!!.getListSize()
@@ -313,17 +314,40 @@ class BannerView @JvmOverloads constructor(
         val isIndicatorBelow =
             bannerManager.bannerOptions.bannerIndicatorParentPosition == BannerIndicatorPosition.BELOW
         if (isIndicatorBelow) {
-            constraintSet.connect(viewPager2.id, ConstraintSet.BOTTOM, indicatorLayout.id, ConstraintSet.TOP)
+            constraintSet.connect(
+                viewPager2.id,
+                ConstraintSet.BOTTOM,
+                indicatorLayout.id,
+                ConstraintSet.TOP
+            )
         } else {
-            constraintSet.connect(viewPager2.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
+            constraintSet.connect(
+                viewPager2.id,
+                ConstraintSet.BOTTOM,
+                ConstraintSet.PARENT_ID,
+                ConstraintSet.BOTTOM
+            )
         }
 
         // indicator
         if (isIndicatorBelow) {
-            constraintSet.connect(indicatorLayout.id, ConstraintSet.TOP, viewPager2.id, ConstraintSet.BOTTOM)
+            constraintSet.connect(
+                indicatorLayout.id,
+                ConstraintSet.TOP,
+                viewPager2.id,
+                ConstraintSet.BOTTOM
+            )
         } else {
-            constraintSet.connect(indicatorLayout.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
-            constraintSet.setVerticalBias(indicatorLayout.id, bannerManager.bannerOptions.indicatorParentVerticalBias)
+            constraintSet.connect(
+                indicatorLayout.id,
+                ConstraintSet.TOP,
+                ConstraintSet.PARENT_ID,
+                ConstraintSet.TOP
+            )
+            constraintSet.setVerticalBias(
+                indicatorLayout.id,
+                bannerManager.bannerOptions.indicatorParentVerticalBias
+            )
         }
 
         // 配置了使用宽高比
@@ -416,7 +440,7 @@ class BannerView @JvmOverloads constructor(
     }
 
     private fun updateIndicator() {
-        if(isCustomIndicator) {
+        if (isCustomIndicator) {
             getIndicatorOptions().slideMode = IndicatorSlideMode.NORMAL
         }
         indicatorView?.notifyChanged()

@@ -21,14 +21,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bvBanner" />
 
-    <Button
-        android:id="@+id/btnRefresh"
-        style="@android:style/Widget.Button.Small"
-        android:layout_width="wrap_content"
+
+
+    <RadioGroup
+        android:id="@+id/rgIndicator"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="refresh"
-        app:layout_constraintBottom_toTopOf="@+id/rgIndicator"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/rgIndicatorCustom">
+
+        <RadioButton
+            android:id="@+id/rb2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="指示器在内部" />
+
+        <RadioButton
+            android:id="@+id/rb3"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="指示器在外部" />
+
+    </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rgIndicatorCustom"
@@ -60,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/btnRefresh">
+        app:layout_constraintBottom_toTopOf="@+id/btnAdd">
 
         <RadioButton
             android:id="@+id/rb1"
@@ -78,39 +95,45 @@
             android:text="有指示器" />
     </RadioGroup>
 
-    <RadioGroup
-        android:id="@+id/rgIndicator"
-        android:layout_width="0dp"
+
+    <Button
+        android:id="@+id/btnAdd"
+        style="@android:style/Widget.Button.Small"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/rgIndicatorStyle"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_marginBottom="5dp"
+        android:text="Add"
+        app:layout_constraintBottom_toTopOf="@+id/rgIndicatorStyle"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <RadioButton
-            android:id="@+id/rb2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="指示器在内部" />
+    <Button
+        android:id="@+id/btnRemove"
+        style="@android:style/Widget.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Remove"
+        app:layout_constraintTop_toTopOf="@+id/btnAdd"
+        app:layout_constraintBottom_toBottomOf="@+id/btnAdd"
+        app:layout_constraintStart_toEndOf="@+id/btnAdd" />
 
-        <RadioButton
-            android:id="@+id/rb3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="指示器在外部" />
-
-
-    </RadioGroup>
+    <Button
+        android:id="@+id/btnSet"
+        style="@android:style/Widget.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Set"
+        app:layout_constraintTop_toTopOf="@+id/btnAdd"
+        app:layout_constraintBottom_toBottomOf="@+id/btnAdd"
+        app:layout_constraintStart_toEndOf="@+id/btnRemove" />
 
     <RadioGroup
         android:id="@+id/rgIndicatorStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/rgIndicator"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/rgIndicatorShape"
         app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@+id/rgIndicator">
+        app:layout_constraintStart_toStartOf="parent">
 
         <RadioButton
             android:id="@+id/rbStyle1"
@@ -137,7 +160,7 @@
         android:id="@+id/rgIndicatorShape"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/rgIndicatorStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/rgIndicatorStyle">

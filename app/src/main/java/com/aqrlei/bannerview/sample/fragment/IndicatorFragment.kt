@@ -19,6 +19,7 @@ import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
 import com.aqrlei.bannerview.widget.indicator.enums.IndicatorStyle
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_pager_indicator.*
+import kotlin.random.Random
 
 /**
  * created by AqrLei on 2020/10/20
@@ -31,7 +32,7 @@ class IndicatorFragment : Fragment() {
     private var dp6 : Int = 3
 
     private val bannerItemArray = ArrayList<Int>().also {
-        it.addAll(arrayOf(Color.GREEN, Color.MAGENTA, Color.BLUE, Color.CYAN, Color.RED))
+        it.addAll(arrayOf(Color.GREEN, Color.MAGENTA, Color.BLUE, Color.CYAN, Color.RED, Color.YELLOW))
     }
 
     override fun onCreateView(
@@ -64,9 +65,25 @@ class IndicatorFragment : Fragment() {
             setBannerViewHolder(SimpleBannerViewHolder(bannerItemArray))
         }
 
-        btnRefresh.setOnClickListener {
-            bannerItemArray.add(Color.YELLOW)
+        btnAdd.setOnClickListener {
+            val addColor = bannerItemArray[Random.Default.nextInt(bannerItemArray.size-1)]
+            bannerItemArray.add(addColor)
             bvBanner.notifyDataSetChanged()
+        }
+
+        btnRemove.setOnClickListener {
+            val removePosition = Random.Default.nextInt(bannerItemArray.size -1)
+            bannerItemArray.removeAt(removePosition)
+            bvBanner.notifyDataSetChanged()
+        }
+        btnSet.setOnClickListener {
+            val position = Random.Default.nextInt(bannerItemArray.size -1)
+            Snackbar.make(
+                bvBanner,
+                "position $position was setted",
+                Snackbar.LENGTH_SHORT
+            ).show()
+            bvBanner.setCurrentItem(position)
         }
 
         rgIndicatorCustom.setOnCheckedChangeListener { group, checkedId ->
