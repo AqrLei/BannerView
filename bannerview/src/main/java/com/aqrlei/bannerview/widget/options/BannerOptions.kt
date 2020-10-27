@@ -8,40 +8,50 @@ import com.aqrlei.bannerview.widget.utils.BannerUtils
 /**
  * created by AqrLei on 2019-12-12
  */
-private const val MIN_SCALE = 0.85F
+internal const val MIN_SCALE = 0.85F
 
 class BannerOptions {
 
     var orientation: Int = ViewPager2.ORIENTATION_HORIZONTAL
+    internal set
     
-    var transformerStyle: TransformerStyle = TransformerStyle.NONE
+    var pageTransformerStyle: PageTransformerStyle = PageTransformerStyle.NORMAL
 
-    //以下字段只有在transformerStyle 设置为MULTI, MULTI_OVERLAP,SCALE_IN才有效果
     var transformerScale: Float = MIN_SCALE
 
-    //以下字段只有在transformerStyle 设置为MULTI, MULTI_OVERLAP才有效果
     var offsetPageLimit: Int = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
 
-    var revealWidth = BannerUtils.dp2px(20F)
+    // 左或上的页面reveal的长度
+    var startRevealWidth = 0F
 
+    // 右或下的页面reveal的长度
+    var endRevealWidth = 0F
+
+    // 页面间的margin
+    var pageMargin = 0F
 
     //自动轮播时间间隔
     var interval: Int = 0
+    internal set
 
     // 是否正在自动循环播放
     var isLooping: Boolean = false
+    internal set
 
     // 是否启用循环
     var isCanLoop: Boolean = false
+    internal set
 
     // 是否启用自动轮播
     var isAutoPlay: Boolean = false
+    internal set
 
-    //banner宽高比
+    //是否使用banner宽高比
     var bannerUseRatio: Boolean = false
-
+    internal set
+    // banner宽高比
     var widthHeightRatio: String = ""
-
+    internal set
 
     var indicatorOptions: IndicatorOptions = IndicatorOptions()
     internal set

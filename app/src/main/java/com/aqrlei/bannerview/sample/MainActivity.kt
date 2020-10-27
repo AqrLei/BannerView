@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
             }
             override fun getItemCount(): Int = pagerArray.size
         }
-        pager.requestDisallowInterceptTouchEvent(false)
 
         TabLayoutMediator(tabLayout, pager) { tab , position ->
             tab.text = pagerTitleArray[position]

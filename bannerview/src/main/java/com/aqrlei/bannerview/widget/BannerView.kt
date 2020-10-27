@@ -2,19 +2,19 @@ package com.aqrlei.bannerview.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.widget.enums.BannerIndicatorGravity
 import com.aqrlei.bannerview.widget.enums.BannerIndicatorPosition
-import com.aqrlei.bannerview.widget.enums.TransformerStyle
+import com.aqrlei.bannerview.widget.enums.PageTransformerStyle
 import com.aqrlei.bannerview.widget.indicator.IndicatorView
 import com.aqrlei.bannerview.widget.indicator.base.IIndicator
 import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
@@ -23,7 +23,8 @@ import com.aqrlei.bannerview.widget.manager.BannerManager
 import com.aqrlei.bannerview.widget.options.BannerIndicatorChildOptions
 import com.aqrlei.bannerview.widget.options.BannerIndicatorParentOptions
 import com.aqrlei.bannerview.widget.options.BannerOptions
-import com.aqrlei.bannerview.widget.transform.factory.BannerPageTransformerFactory
+import com.aqrlei.bannerview.widget.transform.ScaleInOverlapTransformer
+import com.aqrlei.bannerview.widget.transform.ScaleInTransformer
 import com.aqrlei.bannerview.widget.utils.BannerUtils
 
 /**
@@ -37,6 +38,7 @@ class BannerView @JvmOverloads constructor(
 
     companion object {
         const val TAG = "BannerView"
+
         //无限轮播时，设置的item数目
         var MAX_VALUE = 500
     }
@@ -46,6 +48,10 @@ class BannerView @JvmOverloads constructor(
     private var indicatorView: IIndicator? = null
     private val indicatorLayout: ConstraintLayout
     private val viewPager2: ViewPager2
+    private val compositePageTransformer = CompositePageTransformer()
+    private var marginPageTransformer: MarginPageTransformer? = null
+
+    private var defaultPageTransformer: ViewPager2.PageTransformer? = null
 
     var isCustomIndicator: Boolean = false
         private set
@@ -242,6 +248,17 @@ class BannerView @JvmOverloads constructor(
     fun getBannerIndicatorChildOptions(): BannerIndicatorChildOptions =
         getBannerOptions().bannerIndicatorChildOptions
 
+    fun setBannerOptions(block: BannerOptions.() -> Unit) {
+        getBannerOptions().apply(block)
+        setupViewPager2()
+    }
+
+    fun setBannerDimensionRatio(isUseRatio: Boolean, ratio: String) {
+        getBannerOptions().bannerUseRatio = isUseRatio
+        getBannerOptions().widthHeightRatio = ratio
+        refreshDimensionRatio(ConstraintSet().also { it.clone(this) })
+    }
+
     fun setIndicatorOptions(block: IndicatorOptions.() -> Unit) {
         getIndicatorOptions().apply(block)
         updateIndicator()
@@ -313,45 +330,82 @@ class BannerView @JvmOverloads constructor(
      */
     private fun initBanner() {
         setIndicatorValues()
+        currentPosition = 0
         setupViewPager2()
         refreshChildLayoutParams()
+        startAutoLoop()
     }
 
     /**
-     * viewPager2的初始化属性
+     * 设置viewPager2的属性
      */
     private fun setupViewPager2() {
         bannerAdapter ?: return
-        currentPosition = 0
         with(viewPager2) {
             orientation = getBannerOptions().orientation
-            //MULTI
-            if (getBannerOptions().transformerStyle in arrayOf(
-                    TransformerStyle.MULTI,
-                    TransformerStyle.MULTI_OVERLAP
-                )) {
-                offscreenPageLimit = getBannerOptions().offsetPageLimit
-                (getChildAt(0) as? RecyclerView)?.apply {
-                    val padding = getBannerOptions().revealWidth.toInt()
-                    setPadding(padding, 0, padding, 0)
-                    clipToPadding = false
+            offscreenPageLimit = getBannerOptions().offsetPageLimit
+            val pageMargin = getBannerOptions().pageMargin.toInt()
+            (getChildAt(0) as? RecyclerView)?.apply {
+                val paddingStart = getBannerOptions().startRevealWidth.toInt() + pageMargin
+                val paddingEnd = getBannerOptions().endRevealWidth.toInt() + pageMargin
+                if (getBannerOptions().orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
+                    setPadding(paddingStart, 0, paddingEnd, 0)
+                } else {
+                    setPadding(0, paddingStart, 0, paddingEnd)
                 }
+                clipToPadding = false
             }
-
-            //PageTransformer
-            setPageTransformer(
-                BannerPageTransformerFactory.createPageTransformer(
-                    getBannerOptions().transformerStyle,
-                    getBannerOptions().transformerScale
-                )
-            )
             adapter = bannerAdapter
+
+            if (null != marginPageTransformer) {
+                compositePageTransformer.removeTransformer(marginPageTransformer!!)
+            }
+            marginPageTransformer = MarginPageTransformer(pageMargin)
+
+            compositePageTransformer.addTransformer(marginPageTransformer!!)
+
+            refreshPageStyle()
+
+            setPageTransformer(compositePageTransformer)
+
             val checkCanLoop = isCanLoop && bannerAdapter!!.getListSize() > 1
+
             if (checkCanLoop) {
                 setCurrentItem(bannerAdapter!!.getOriginalPosition(), false)
             }
         }
-        startAutoLoop()
+    }
+
+
+    fun removePageTransformer(pageTransformer: ViewPager2.PageTransformer) {
+        compositePageTransformer.removeTransformer(pageTransformer)
+    }
+
+    fun addPageTransformer(pageTransformer: ViewPager2.PageTransformer) {
+        compositePageTransformer.addTransformer(pageTransformer)
+    }
+
+    fun removeDefaultPageTransformer() {
+        defaultPageTransformer?.let { compositePageTransformer.removeTransformer(it) }
+    }
+
+    private fun refreshPageStyle() {
+        removeDefaultPageTransformer()
+        val scale = getBannerOptions().transformerScale
+        when (getBannerOptions().pageTransformerStyle) {
+            PageTransformerStyle.MULTI_OVERLAP -> {
+                defaultPageTransformer = ScaleInOverlapTransformer(scale)
+            }
+            PageTransformerStyle.MULTI_SCALE_IN -> {
+                defaultPageTransformer = ScaleInTransformer(scale)
+            }
+            PageTransformerStyle.NORMAL -> {
+                // do nothing
+            }
+        }
+
+        defaultPageTransformer?.let { compositePageTransformer.addTransformer(it) }
+
     }
 
     /**
@@ -401,12 +455,16 @@ class BannerView @JvmOverloads constructor(
         }
 
         // 配置了使用宽高比
+        refreshDimensionRatio(constraintSet)
+
+        constraintSet.applyTo(this)
+    }
+
+    private fun refreshDimensionRatio(constraintSet: ConstraintSet) {
         val bannerRatio = getBannerOptions().widthHeightRatio
         bannerRatio.takeIf { it.isNotBlank() && getBannerOptions().bannerUseRatio }?.let {
             constraintSet.setDimensionRatio(viewPager2.id, bannerRatio)
         }
-
-        constraintSet.applyTo(this)
     }
 
     /**

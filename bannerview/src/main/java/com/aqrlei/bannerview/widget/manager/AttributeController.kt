@@ -11,6 +11,7 @@ import com.aqrlei.bannerview.widget.enums.*
 import com.aqrlei.bannerview.widget.indicator.enums.*
 import com.aqrlei.bannerview.widget.options.BannerIndicatorChildOptions
 import com.aqrlei.bannerview.widget.options.BannerOptions
+import com.aqrlei.bannerview.widget.options.MIN_SCALE
 import com.aqrlei.bannerview.widget.utils.BannerUtils
 
 /**
@@ -83,15 +84,17 @@ class AttributeController(private val bannerOptions: BannerOptions) {
                 interval = getInteger(R.styleable.BannerView_interval, DEFAULT_INTERVAL)
                 isAutoPlay = getBoolean(R.styleable.BannerView_isAuto, false)
                 isCanLoop = getBoolean(R.styleable.BannerView_banner_can_loop, false)
-                revealWidth = getDimension(R.styleable.BannerView_banner_reveal_width, 0f)
-                transformerStyle = TransformerStyle.values()[getInt(R.styleable.BannerView_banner_transformer_style, 0)]
+                startRevealWidth = getDimension(R.styleable.BannerView_banner_start_reveal_width, 0F)
+                endRevealWidth = getDimension(R.styleable.BannerView_banner_end_reveal_width, 0F)
+                pageMargin = getDimension(R.styleable.BannerView_banner_page_margin, 0F)
+                pageTransformerStyle = PageTransformerStyle.values()[getInt(R.styleable.BannerView_banner_page_transformer_style, 0)]
 
 
                 offsetPageLimit = getInt(
                     R.styleable.BannerView_banner_offset_page_limit,
                     ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT)
 
-                transformerScale = getFloat(R.styleable.BannerView_banner_transformer_scale, 0.85F)
+                transformerScale = getFloat(R.styleable.BannerView_banner_transformer_scale, MIN_SCALE)
             }
         }
     }

@@ -16,7 +16,9 @@
         <attr name="banner_indicator_checked_width" format="dimension" />
         <attr name="banner_indicator_gap" format="dimension" />
         <attr name="banner_indicator_height" format="dimension" />
-        <attr name="banner_reveal_width" format="dimension" />
+        <attr name="banner_start_reveal_width" format="dimension" />
+        <attr name="banner_end_reveal_width" format="dimension" />
+        <attr name="banner_page_margin" format="dimension"/>
         <attr name="banner_indicator_marginStart" format="dimension" />
         <attr name="banner_indicator_marginTop" format="dimension" />
         <attr name="banner_indicator_marginEnd" format="dimension" />
@@ -50,16 +52,10 @@
         <attr name="banner_offset_page_limit" format="integer" />
         <attr name="banner_scroll_duration" format="integer" />
 
-        <attr name="banner_transformer_style" format="enum">
-            <enum name="NONE" value="0" />
-            <enum name="SCALE_IN" value="1" />
-            <enum name="DEPTH" value="2" />
-            <enum name="STACK" value="3" />
-            <enum name="ACCORDION" value="4" />
-            <enum name="ROTATE" value="5" />
-            <enum name="ZOOM_OUT" value="6" />
-            <enum name="MULTI" value="7" />
-            <enum name="MULTI_OVERLAP" value="8" />
+        <attr name="banner_page_transformer_style" format="enum">
+            <enum name="NORMAL" value="0" />
+            <enum name="MULTI_SCALE_IN" value="1" />
+            <enum name="MULTI_OVERLAP" value="2" />
         </attr>
 
         <attr name="banner_transformer_scale" format="float" />

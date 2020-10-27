@@ -1,18 +1,30 @@
 package com.aqrlei.bannerview.widget.transform
 
 import android.view.View
+import com.aqrlei.bannerview.widget.options.MIN_SCALE
 
 /**
  * created by AqrLei on 2020/4/23
  */
-private const val MIN_SCALE = 0.75f
 
 class DepthPageTransformer : BasePageTransformer() {
 
-    override fun isPagingEnabled(): Boolean = true
+    override fun onPreTransform(page: View, position: Float) {
+        with(page) {
+            rotationX = 0F
+            rotationY = 0F
+            rotation = 0F
+            scaleX = 1F
+            scaleY = 1F
+            pivotX = 0F
+            pivotY = 0F
+            translationY = 0F
+            translationX = 0F
+            page.alpha = if ((position <= -1f || position >= 1f)) 0F else 1f
+        }
+    }
 
     override fun onTransformMoveToLeft(page: View, position: Float) {
-        super.onTransformMoveToLeft(page, position)
         with(page) {
             alpha = 1f
             translationX = 0f
@@ -23,7 +35,6 @@ class DepthPageTransformer : BasePageTransformer() {
     }
 
     override fun onTransformMoveToRight(page: View, position: Float) {
-        super.onTransformMoveToRight(page, position)
         with(page) {
             // Fade the page out.
             alpha = 1 - position

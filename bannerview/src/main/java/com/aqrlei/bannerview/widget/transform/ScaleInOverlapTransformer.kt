@@ -1,50 +1,39 @@
 package com.aqrlei.bannerview.widget.transform
 
+import android.os.Build
 import android.view.View
+import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import kotlin.math.abs
+import kotlin.math.max
 
 /**
  * created by AqrLei on 2020/4/24
  */
-private const val MIN_SCALE = 0.85F
-private const val CENTER_SCALE = 0.5F
-
-class ScaleInOverlapTransformer(private val minScale: Float = MIN_SCALE) : BasePageTransformer() {
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+class ScaleInOverlapTransformer(private val minScale: Float = 0.85F) : BasePageTransformer() {
     override fun onPreTransform(page: View, position: Float) {
+        val isHorizontal = isHorizontal(page)
         with(page) {
-            pivotY = height / 2F
-            pivotX = width / 2F
+            elevation = -abs(position)
+            val scaleDelta = abs(position * 0.2F)
+            val scale = max(1f - scaleDelta, minScale)
+            scaleX = scale
+            scaleY = scale
+            if (isHorizontal) {
+                translationX = if (position > 0) (-width * (1f - scale)) else (width * (1f - scale))
+            } else {
+                translationY = if (position > 0) (-width * (1f - scale)) else (width * (1f - scale))
+            }
         }
     }
 
-    override fun onTransformOffScreenLeft(page: View, position: Float) {
-        with(page) {
-            scaleY = minScale
-            pivotX = width.toFloat()
-        }
-    }
-
-    override fun onTransformOffScreenRight(page: View, position: Float) {
-        with(page) {
-            pivotX = 0f
-            scaleY = minScale
-        }
-    }
-
-    override fun onTransformMoveToLeft(page: View, position: Float) {
-        super.onTransformMoveToLeft(page, position)
-        with(page) {
-            val scaleFactor: Float = (1 + position) * (1 - minScale) + minScale
-            scaleY = scaleFactor
-            pivotX = width * (CENTER_SCALE + CENTER_SCALE * -position)
-        }
-    }
-
-    override fun onTransformMoveToRight(page: View, position: Float) {
-        super.onTransformMoveToRight(page, position)
-        with(page) {
-            val scaleFactor: Float = (1 - position) * (1 - minScale) + minScale
-            page.scaleY = scaleFactor
-            page.pivotX = width * ((1 - position) * CENTER_SCALE)
-        }
+    private fun isHorizontal(page: View): Boolean {
+        val parent = page.parent
+        val parentParent = parent?.parent
+        return if (parent is RecyclerView && parentParent is ViewPager2) {
+            parentParent.orientation == ViewPager2.ORIENTATION_HORIZONTAL
+        } else true
     }
 }
