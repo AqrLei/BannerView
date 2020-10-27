@@ -2,8 +2,10 @@ package com.aqrlei.bannerview.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -35,8 +37,6 @@ class BannerView @JvmOverloads constructor(
 
     companion object {
         const val TAG = "BannerView"
-        var logEnable: Boolean = false
-
         //无限轮播时，设置的item数目
         var MAX_VALUE = 500
     }
@@ -135,6 +135,17 @@ class BannerView @JvmOverloads constructor(
             }
         }
 
+    var orientation: Int
+        get() = getBannerOptions().orientation
+        set(value) {
+            if (value in setOf(ViewPager2.ORIENTATION_HORIZONTAL, ViewPager2.ORIENTATION_VERTICAL)
+                && value != orientation
+            ) {
+                getBannerOptions().orientation = value
+                viewPager2.orientation = getBannerOptions().orientation
+            }
+        }
+
     init {
         bannerManager.initAttrs(context, attrs)
         inflate(context, R.layout.layout_banner_child, this)
@@ -152,24 +163,56 @@ class BannerView @JvmOverloads constructor(
         stopAutoLoop()
     }
 
-    //TODO 目前是有问题的
+    private var downX: Float = 0F
+    private var downY: Float = 0F
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         bannerAdapter ?: return super.onInterceptTouchEvent(ev)
-        val itemCount = bannerAdapter!!.getListSize()
-        val realCanLoop = isCanLoop && itemCount > 1
-        val canIntercept = viewPager2.isUserInputEnabled || itemCount > 1
+        val lastIndex = bannerAdapter!!.getListSize() - 1
+        val canIntercept = viewPager2.isUserInputEnabled || lastIndex > 0
         if (!canIntercept) {
             return super.onInterceptTouchEvent(ev)
         }
 
         when (ev?.action) {
-            MotionEvent.ACTION_DOWN -> parent.requestDisallowInterceptTouchEvent(viewPager2.currentItem < itemCount - 1 || realCanLoop)
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> parent.requestDisallowInterceptTouchEvent(
-                false
-            )
+            MotionEvent.ACTION_DOWN -> {
+                downX = ev.x
+                downY = ev.y
+                parent.requestDisallowInterceptTouchEvent(lastIndex > 0)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (getBannerOptions().orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
+                    parent.requestDisallowInterceptTouchEvent(horizontalCanSlide(lastIndex, ev))
+                } else {
+                    parent.requestDisallowInterceptTouchEvent(verticalCanSlide(lastIndex, ev))
+                }
+            }
+            MotionEvent.ACTION_UP,
+            MotionEvent.ACTION_CANCEL -> {
+                parent.requestDisallowInterceptTouchEvent(false)
+            }
         }
         return super.onInterceptTouchEvent(ev)
 
+    }
+
+    //横向
+    private fun horizontalCanSlide(lastIndex: Int, ev: MotionEvent): Boolean {
+        val moveX = ev.x
+        return when (viewPager2.currentItem) {
+            0 -> moveX - downX < 0
+            lastIndex -> moveX - downX > 0
+            else -> true
+        }
+    }
+
+    // 纵向
+    private fun verticalCanSlide(lastIndex: Int, ev: MotionEvent): Boolean {
+        val moveY = ev.y
+        return when (viewPager2.currentItem) {
+            0 -> moveY - downY < 0
+            lastIndex -> moveY - downY > 0
+            else -> true
+        }
     }
 
     /**
@@ -231,7 +274,6 @@ class BannerView @JvmOverloads constructor(
         val index = if (checkCanLoop) getLoopItemIndex(item) else item
         viewPager2.currentItem = index
         startAutoLoop()
-
     }
 
     fun setCurrentItem(item: Int, smoothScroll: Boolean) {
@@ -282,12 +324,12 @@ class BannerView @JvmOverloads constructor(
         bannerAdapter ?: return
         currentPosition = 0
         with(viewPager2) {
+            orientation = getBannerOptions().orientation
             //MULTI
             if (getBannerOptions().transformerStyle in arrayOf(
                     TransformerStyle.MULTI,
                     TransformerStyle.MULTI_OVERLAP
-                )
-            ) {
+                )) {
                 offscreenPageLimit = getBannerOptions().offsetPageLimit
                 (getChildAt(0) as? RecyclerView)?.apply {
                     val padding = getBannerOptions().revealWidth.toInt()
@@ -475,7 +517,10 @@ class BannerView @JvmOverloads constructor(
             }
             if (null == it.parent) {
                 indicatorLayout.removeAllViews()
-                indicatorLayout.addView(it, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+                indicatorLayout.addView(
+                    it,
+                    LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+                )
             }
             refreshIndicatorLayoutParams()
         }
@@ -484,7 +529,7 @@ class BannerView @JvmOverloads constructor(
     private fun refreshIndicatorLayoutParams() {
         val constraintSet = ConstraintSet()
         constraintSet.clone(indicatorLayout)
-        val horizontalBias =  when (getBannerIndicatorChildOptions().indicatorChildGravity) {
+        val horizontalBias = when (getBannerIndicatorChildOptions().indicatorChildGravity) {
             BannerIndicatorGravity.START -> 0F
             BannerIndicatorGravity.CENTER -> 0.5F
             BannerIndicatorGravity.END -> 1.0F
@@ -492,10 +537,34 @@ class BannerView @JvmOverloads constructor(
         }
         val indicatorMargin = getBannerIndicatorChildOptions().indicatorChildMargin
 
-        constraintSet.connect(R.id.indicatorChildView, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START,indicatorMargin.start)
-        constraintSet.connect(R.id.indicatorChildView, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP,indicatorMargin.top)
-        constraintSet.connect(R.id.indicatorChildView, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END,indicatorMargin.end)
-        constraintSet.connect(R.id.indicatorChildView, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM,indicatorMargin.bottom)
+        constraintSet.connect(
+            R.id.indicatorChildView,
+            ConstraintSet.START,
+            ConstraintSet.PARENT_ID,
+            ConstraintSet.START,
+            indicatorMargin.start
+        )
+        constraintSet.connect(
+            R.id.indicatorChildView,
+            ConstraintSet.TOP,
+            ConstraintSet.PARENT_ID,
+            ConstraintSet.TOP,
+            indicatorMargin.top
+        )
+        constraintSet.connect(
+            R.id.indicatorChildView,
+            ConstraintSet.END,
+            ConstraintSet.PARENT_ID,
+            ConstraintSet.END,
+            indicatorMargin.end
+        )
+        constraintSet.connect(
+            R.id.indicatorChildView,
+            ConstraintSet.BOTTOM,
+            ConstraintSet.PARENT_ID,
+            ConstraintSet.BOTTOM,
+            indicatorMargin.bottom
+        )
 
         constraintSet.setHorizontalBias(R.id.indicatorChildView, horizontalBias)
         constraintSet.applyTo(indicatorLayout)

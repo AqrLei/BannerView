@@ -74,6 +74,8 @@ class AttributeController(private val bannerOptions: BannerOptions) {
         with(typedArray) {
             initBannerIndicatorAttrs(typedArray)
             bannerOptions.run {
+
+                orientation = getInt(R.styleable.BannerView_android_orientation, ViewPager2.ORIENTATION_HORIZONTAL)
                 bannerUseRatio = getBoolean(R.styleable.BannerView_banner_use_ratio, false)
                 if (bannerUseRatio) {
                     widthHeightRatio = getString(R.styleable.BannerView_widthHeightRatio) ?: ""
@@ -83,6 +85,7 @@ class AttributeController(private val bannerOptions: BannerOptions) {
                 isCanLoop = getBoolean(R.styleable.BannerView_banner_can_loop, false)
                 revealWidth = getDimension(R.styleable.BannerView_banner_reveal_width, 0f)
                 transformerStyle = TransformerStyle.values()[getInt(R.styleable.BannerView_banner_transformer_style, 0)]
+
 
                 offsetPageLimit = getInt(
                     R.styleable.BannerView_banner_offset_page_limit,

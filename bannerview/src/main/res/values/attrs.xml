@@ -2,6 +2,7 @@
 <resources>
 
     <declare-styleable name="BannerView">
+        <attr name="android:orientation"/>
         <!--宽高比-->
         <attr name="widthHeightRatio" format="string" />
         <!--是否开启自动轮播-->

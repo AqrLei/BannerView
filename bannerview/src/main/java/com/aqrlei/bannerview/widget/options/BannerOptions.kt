@@ -11,6 +11,8 @@ import com.aqrlei.bannerview.widget.utils.BannerUtils
 private const val MIN_SCALE = 0.85F
 
 class BannerOptions {
+
+    var orientation: Int = ViewPager2.ORIENTATION_HORIZONTAL
     
     var transformerStyle: TransformerStyle = TransformerStyle.NONE
 
