@@ -10,7 +10,91 @@
         style="@style/BannerStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:isAuto="true"
+        app:isAuto="false"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rgPageOrientation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/btnAdd">
+
+        <RadioButton
+            android:id="@+id/rb1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="HORIZONTAL" />
+
+        <RadioButton
+            android:id="@+id/rb0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="VERTICAL" />
+    </RadioGroup>
+
+
+    <Button
+        android:id="@+id/btnAdd"
+        style="@android:style/Widget.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="Add"
+        app:layout_constraintBottom_toTopOf="@+id/rgPageStyle"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnRemove"
+        style="@android:style/Widget.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Remove"
+        app:layout_constraintTop_toTopOf="@+id/btnAdd"
+        app:layout_constraintBottom_toBottomOf="@+id/btnAdd"
+        app:layout_constraintStart_toEndOf="@+id/btnAdd" />
+
+    <Button
+        android:id="@+id/btnSet"
+        style="@android:style/Widget.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Set"
+        app:layout_constraintTop_toTopOf="@+id/btnAdd"
+        app:layout_constraintBottom_toBottomOf="@+id/btnAdd"
+        app:layout_constraintStart_toEndOf="@+id/btnRemove" />
+
+    <RadioGroup
+        android:id="@+id/rgPageStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioButton
+            android:id="@+id/rbStyle1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="normal" />
+
+        <RadioButton
+            android:id="@+id/rbStyle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="multi_scale_in" />
+
+        <RadioButton
+            android:id="@+id/rbStyle3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="multi_overlap" />
+
+    </RadioGroup>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

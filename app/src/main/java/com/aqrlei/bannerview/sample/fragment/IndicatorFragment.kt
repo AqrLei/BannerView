@@ -25,6 +25,7 @@ import kotlin.random.Random
  * created by AqrLei on 2020/10/20
  */
 class IndicatorFragment : Fragment() {
+
     companion object {
         fun create() = IndicatorFragment()
     }
@@ -151,7 +152,6 @@ class IndicatorFragment : Fragment() {
                     bvBanner.setIndicatorOptions {
                         slideMode = IndicatorSlideMode.WORM
                     }
-                    outIndicator.refreshIndicatorOptions {  }
                 }
             }
         }

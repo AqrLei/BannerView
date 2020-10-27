@@ -11,20 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:isAuto="false"
-        app:banner_page_transformer_style="MULTI_OVERLAP"
-        app:banner_start_reveal_width="30dp"
-        app:banner_end_reveal_width="30dp"
+        app:isAuto="true"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <com.aqrlei.bannerview.widget.indicator.IndicatorView
-        android:id="@+id/outIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bvBanner" />
-
 
 
     <RadioGroup
