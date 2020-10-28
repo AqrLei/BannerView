@@ -13,8 +13,7 @@ internal const val MIN_SCALE = 0.85F
 class BannerOptions {
 
     var orientation: Int = ViewPager2.ORIENTATION_HORIZONTAL
-    internal set
-    
+
     var pageTransformerStyle: PageTransformerStyle = PageTransformerStyle.NORMAL
 
     var transformerScale: Float = MIN_SCALE

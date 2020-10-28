@@ -3,6 +3,7 @@ package com.aqrlei.bannerview.sample.fragment
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,6 +48,11 @@ class TransformerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val dp5 = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            5F,
+            this.resources.displayMetrics
+        )
         with(bvBanner) {
             pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -66,21 +72,68 @@ class TransformerFragment : Fragment() {
             setBannerViewHolder(SimpleBannerViewHolder(bannerItemArray))
         }
 
-        rgPageStyle.setOnCheckedChangeListener { group, checkedId ->
+        rgPageStyle.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rbStyle1 -> {
+                    bvBanner.setBannerOptions {
+                        pageTransformerStyle = PageTransformerStyle.NORMAL
+                        startRevealWidth = 0F
+                        endRevealWidth = 0F
+                        pageMargin = 0F
+                    }
+                }
+                R.id.rbStyle2 -> {
+                    bvBanner.setBannerOptions {
+                        pageTransformerStyle = PageTransformerStyle.MULTI_SCALE_IN
 
-            bvBanner.setBannerOptions {
-                pageTransformerStyle = when (checkedId) {
-                    R.id.rbStyle1 -> PageTransformerStyle.NORMAL
-                    R.id.rbStyle2 -> PageTransformerStyle.MULTI_SCALE_IN
-                    R.id.rbStyle3 -> PageTransformerStyle.MULTI_OVERLAP
-                    else -> PageTransformerStyle.NORMAL
+                        startRevealWidth = dp5 * 6
+                        endRevealWidth = dp5 * 6
+                        pageMargin = dp5 * 2
+                    }
+                }
+                R.id.rbStyle3 -> {
+                    bvBanner.setBannerOptions {
+                        pageTransformerStyle = PageTransformerStyle.MULTI_OVERLAP
+                        startRevealWidth = dp5 * 6
+                        endRevealWidth = dp5 * 6
+                        pageMargin = 0F
+                    }
+                }
+
+                R.id.rbStyle4 -> {
+                    bvBanner.setBannerOptions {
+                        pageTransformerStyle = PageTransformerStyle.NORMAL
+                        startRevealWidth = dp5 * 6
+                        endRevealWidth = dp5 * 6
+                        pageMargin = dp5 * 2
+                    }
+                }
+
+                R.id.rbStyle5 -> {
+                    bvBanner.removeDefaultPageTransformer()
+                    bvBanner.setBannerOptions {
+                        pageTransformerStyle = PageTransformerStyle.NORMAL
+                        startRevealWidth = 0F
+                        endRevealWidth = dp5 * 6
+                        pageMargin = dp5 * 2
+                    }
+
+                }
+                R.id.rbStyle6 -> {
+                    bvBanner.setBannerOptions {
+                        pageTransformerStyle = PageTransformerStyle.NORMAL
+                        startRevealWidth = 0F
+                        endRevealWidth = 0F
+                        pageMargin = dp5 * 2
+                    }
                 }
             }
-
         }
-        rgPageOrientation.setOnCheckedChangeListener { group, checkedId ->
-            bvBanner.orientation = if (checkedId == R.id.rb1) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.VISIBLE
+        rgPageOrientation.setOnCheckedChangeListener { _, checkedId ->
+            bvBanner.setBannerOptions {
+                orientation =
+                    if (checkedId == R.id.rb1) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
+            }
         }
-
     }
 }

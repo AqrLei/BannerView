@@ -141,17 +141,6 @@ class BannerView @JvmOverloads constructor(
             }
         }
 
-    var orientation: Int
-        get() = getBannerOptions().orientation
-        set(value) {
-            if (value in setOf(ViewPager2.ORIENTATION_HORIZONTAL, ViewPager2.ORIENTATION_VERTICAL)
-                && value != orientation
-            ) {
-                getBannerOptions().orientation = value
-                viewPager2.orientation = getBannerOptions().orientation
-            }
-        }
-
     init {
         bannerManager.initAttrs(context, attrs)
         inflate(context, R.layout.layout_banner_child, this)
@@ -392,15 +381,15 @@ class BannerView @JvmOverloads constructor(
     private fun refreshPageStyle() {
         removeDefaultPageTransformer()
         val scale = getBannerOptions().transformerScale
-        when (getBannerOptions().pageTransformerStyle) {
+        defaultPageTransformer = when (getBannerOptions().pageTransformerStyle) {
             PageTransformerStyle.MULTI_OVERLAP -> {
-                defaultPageTransformer = ScaleInOverlapTransformer(scale)
+                ScaleInOverlapTransformer(scale)
             }
             PageTransformerStyle.MULTI_SCALE_IN -> {
-                defaultPageTransformer = ScaleInTransformer(scale)
+                ScaleInTransformer(scale)
             }
             PageTransformerStyle.NORMAL -> {
-                // do nothing
+                null
             }
         }
 

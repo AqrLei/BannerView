@@ -17,12 +17,13 @@
         android:id="@+id/rgPageOrientation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/btnAdd">
+        app:layout_constraintBottom_toTopOf="@+id/rgPageStyle">
 
         <RadioButton
             android:id="@+id/rb1"
+            android:checked="true"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -33,40 +34,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:checked="true"
             android:text="VERTICAL" />
     </RadioGroup>
 
-
-    <Button
-        android:id="@+id/btnAdd"
-        style="@android:style/Widget.Button.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Add"
-        app:layout_constraintBottom_toTopOf="@+id/rgPageStyle"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnRemove"
-        style="@android:style/Widget.Button.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Remove"
-        app:layout_constraintTop_toTopOf="@+id/btnAdd"
-        app:layout_constraintBottom_toBottomOf="@+id/btnAdd"
-        app:layout_constraintStart_toEndOf="@+id/btnAdd" />
-
-    <Button
-        android:id="@+id/btnSet"
-        style="@android:style/Widget.Button.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Set"
-        app:layout_constraintTop_toTopOf="@+id/btnAdd"
-        app:layout_constraintBottom_toBottomOf="@+id/btnAdd"
-        app:layout_constraintStart_toEndOf="@+id/btnRemove" />
 
     <RadioGroup
         android:id="@+id/rgPageStyle"
@@ -93,6 +63,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="multi_overlap" />
+
+        <RadioButton
+            android:id="@+id/rbStyle4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="two_side_reveal" />
+
+        <RadioButton
+            android:id="@+id/rbStyle5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="right_side_reveal" />
+
+        <RadioButton
+            android:id="@+id/rbStyle6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="only_page_margin" />
 
     </RadioGroup>
 

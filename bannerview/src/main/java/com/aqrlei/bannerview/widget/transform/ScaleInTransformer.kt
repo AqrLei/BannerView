@@ -55,15 +55,18 @@ class ScaleInTransformer(private val minScale: Float = MIN_SCALE) : BasePageTran
             if (isHorizontal) {
                 pivotX = width * ((1 - position) * CENTER_SCALE)
             } else {
-                pivotY = height * ((1 - position) * CENTER_SCALE)
+                pivotY = height * /**/((1 - position) * CENTER_SCALE)
             }
         }
     }
 
     override fun onTransformOffScreenRight(page: View, position: Float) {
         with(page) {
-            pivotX = 0F
-            pivotY = 0F
+            if (isHorizontal) {
+                pivotX = 0F
+            } else {
+                pivotY = 0F
+            }
             scaleX = minScale
             scaleY = minScale
         }
