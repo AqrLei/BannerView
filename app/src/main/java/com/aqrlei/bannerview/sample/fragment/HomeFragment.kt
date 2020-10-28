@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
     }
 
     private val bannerItemArray = ArrayList<Int>().also {
-        it.addAll(arrayOf(Color.MAGENTA, Color.BLUE, Color.CYAN, Color.RED, Color.YELLOW))
+        it.addAll(arrayOf(Color.MAGENTA, Color.BLUE, Color.CYAN, Color.RED, Color.YELLOW, Color.LTGRAY))
     }
 
     override fun onCreateView(
