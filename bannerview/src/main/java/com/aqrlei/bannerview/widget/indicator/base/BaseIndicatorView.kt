@@ -81,8 +81,9 @@ abstract class BaseIndicatorView @JvmOverloads constructor(
         notifyChanged()
     }
 
-    fun setupWithViewPager2(viewPager2: ViewPager2?) {
+    fun setupWithViewPager2(viewPager2: ViewPager2?, block: (IndicatorOptions.() -> Unit)?= null) {
         this.viewPager2 = viewPager2
+        block?.let { mIndicatorOptions.apply(it) }
         notifyChanged()
     }
 

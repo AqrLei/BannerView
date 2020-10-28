@@ -8,6 +8,8 @@
     </style>
 
     <style name="BannerStyle">
+        <item name="banner_indicator_checked_width">9dp</item>
+        <item name="banner_indicator_normal_width">6dp</item>
         <item name="banner_use_ratio">true</item>
         <item name="widthHeightRatio">375:255</item>
         <item name="banner_can_loop">true</item>
