@@ -1,6 +1,7 @@
 package com.aqrlei.bannerview.sample.fragment
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -140,7 +141,7 @@ class TransformerFragment : Fragment() {
         }
 
         val accordion = AccordionTransformer()
-        val depth = DepthPageTransformer()
+        val depth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP )DepthPageTransformer() else null
         val zoomOut  = ZoomOutPageTransformer()
         rgTransformerStyle.setOnCheckedChangeListener { _, checkedId ->
             when(checkedId) {

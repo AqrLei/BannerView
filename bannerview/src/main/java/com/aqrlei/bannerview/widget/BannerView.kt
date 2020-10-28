@@ -1,6 +1,7 @@
 package com.aqrlei.bannerview.widget
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -369,12 +370,12 @@ class BannerView @JvmOverloads constructor(
     }
 
 
-    fun removePageTransformer(pageTransformer: ViewPager2.PageTransformer) {
-        compositePageTransformer.removeTransformer(pageTransformer)
+    fun removePageTransformer(pageTransformer: ViewPager2.PageTransformer?) {
+        pageTransformer?.let { compositePageTransformer.removeTransformer(pageTransformer) }
     }
 
-    fun addPageTransformer(pageTransformer: ViewPager2.PageTransformer) {
-        compositePageTransformer.addTransformer(pageTransformer)
+    fun addPageTransformer(pageTransformer: ViewPager2.PageTransformer?) {
+        pageTransformer?.let { compositePageTransformer.addTransformer(pageTransformer) }
     }
 
     fun removeDefaultPageTransformer() {
@@ -386,7 +387,11 @@ class BannerView @JvmOverloads constructor(
         val scale = getBannerOptions().transformerScale
         defaultPageTransformer = when (getBannerOptions().pageTransformerStyle) {
             PageTransformerStyle.MULTI_OVERLAP -> {
-                ScaleInOverlapTransformer(scale)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ScaleInOverlapTransformer(scale)
+                } else {
+                    ScaleInTransformer(scale)
+                }
             }
             PageTransformerStyle.MULTI_SCALE_IN -> {
                 ScaleInTransformer(scale)

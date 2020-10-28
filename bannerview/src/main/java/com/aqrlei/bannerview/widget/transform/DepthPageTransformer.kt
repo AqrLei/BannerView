@@ -1,12 +1,14 @@
 package com.aqrlei.bannerview.widget.transform
 
+import android.os.Build
 import android.view.View
+import androidx.annotation.RequiresApi
 import com.aqrlei.bannerview.widget.options.MIN_SCALE
 
 /**
  * created by AqrLei on 2020/4/23
  */
-
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 class DepthPageTransformer : BasePageTransformer() {
 
     override fun onPreTransform(page: View, position: Float) {
