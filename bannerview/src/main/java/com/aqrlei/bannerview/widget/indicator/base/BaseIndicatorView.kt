@@ -128,7 +128,7 @@ abstract class BaseIndicatorView @JvmOverloads constructor(
     }
 
     private fun pageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        if (slideMode != IndicatorSlideMode.NORMAL && pageSize > 1 && positionOffset != 0F) {
+        if (slideMode != IndicatorSlideMode.NORMAL && pageSize > 1) {
             if (position % pageSize == pageSize - 1) {
                 currentPosition = if (positionOffset < 0.5) position else 0
                 slideProgress = 0F

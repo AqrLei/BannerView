@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -42,7 +43,6 @@ class HomeFragment : Fragment() {
             3F,
             this.context!!.resources.displayMetrics
         )
-        viewPager2.orientation = ViewPager2.ORIENTATION_VERTICAL
         viewPager2.adapter = object : RecyclerView.Adapter<ItemViewHolder>() {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
                 return ItemViewHolder(
@@ -53,18 +53,18 @@ class HomeFragment : Fragment() {
 
             override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
                 holder.itemView.tvBanner.setBackgroundColor(bannerItemArray[position])
-                holder.itemView.tvBanner.text = "index=$position"
+                holder.itemView.tvBanner.text = "${position+1}"
             }
 
             override fun getItemCount(): Int = bannerItemArray.size
         }
         indicatorBottom.setupWithViewPager2(viewPager2) {
             indicatorStyle = IndicatorStyle.ROUND_RECT
-            normalIndicatorWidth = dp3 * 6
-            checkedIndicatorWidth = dp3 * 6
-            indicatorGap = dp3.toInt()*4
+            normalIndicatorWidth = dp3 * 2
+            checkedIndicatorWidth = dp3 * 4
+            indicatorGap = dp3.toInt()*2
+            sliderHeight = dp3 * 2
             checkedColor = Color.GREEN
-            slideMode = IndicatorSlideMode.WORM
         }
     }
 

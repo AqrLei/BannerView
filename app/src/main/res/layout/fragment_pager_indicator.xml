@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:isAuto="true"
+        app:isAuto="false"
+        app:banner_indicator_checked_width="15dp"
         app:layout_constraintTop_toTopOf="parent" />
 
 

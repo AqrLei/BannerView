@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -27,6 +28,8 @@ import com.aqrlei.bannerview.widget.options.BannerOptions
 import com.aqrlei.bannerview.widget.transform.ScaleInOverlapTransformer
 import com.aqrlei.bannerview.widget.transform.ScaleInTransformer
 import com.aqrlei.bannerview.widget.utils.BannerUtils
+import kotlin.math.absoluteValue
+import kotlin.math.sign
 
 /**
  * created by AqrLei on 2020/4/23
@@ -45,6 +48,10 @@ class BannerView @JvmOverloads constructor(
     }
 
     private val bannerManager: BannerManager = BannerManager()
+
+    private val touchSlop: Int
+    private var initialX: Float = 0F
+    private var initialY: Float = 0F
 
     private var indicatorView: IIndicator? = null
     private val indicatorLayout: ConstraintLayout
@@ -147,6 +154,7 @@ class BannerView @JvmOverloads constructor(
         inflate(context, R.layout.layout_banner_child, this)
         viewPager2 = findViewById(R.id.viewPager2)
         indicatorLayout = findViewById(R.id.indicator)
+        touchSlop = ViewConfiguration.get(context).scaledTouchSlop
     }
 
     override fun onAttachedToWindow() {
@@ -159,27 +167,39 @@ class BannerView @JvmOverloads constructor(
         stopAutoLoop()
     }
 
-    private var downX: Float = 0F
-    private var downY: Float = 0F
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         bannerAdapter ?: return super.onInterceptTouchEvent(ev)
+        handleInterceptTouchEvent(ev)
+        return super.onInterceptTouchEvent(ev)
+
+    }
+
+    private fun handleInterceptTouchEvent(ev: MotionEvent?) {
         val lastIndex = bannerAdapter!!.getListSize() - 1
         val canIntercept = viewPager2.isUserInputEnabled || lastIndex > 0
-        if (!canIntercept) {
-            return super.onInterceptTouchEvent(ev)
+
+        if ((!canChildScroll(viewPager2.orientation, -1.0F)
+                    && !canChildScroll(viewPager2.orientation, 1.0F)) || !canIntercept
+        ) {
+            return
         }
 
         when (ev?.action) {
             MotionEvent.ACTION_DOWN -> {
-                downX = ev.x
-                downY = ev.y
+                initialX = ev.x
+                initialY = ev.y
                 parent.requestDisallowInterceptTouchEvent(lastIndex > 0)
             }
             MotionEvent.ACTION_MOVE -> {
-                if (getBannerOptions().orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
-                    parent.requestDisallowInterceptTouchEvent(horizontalCanSlide(lastIndex, ev))
-                } else {
-                    parent.requestDisallowInterceptTouchEvent(verticalCanSlide(lastIndex, ev))
+                val isHorizontal =
+                    getBannerOptions().orientation == ViewPager2.ORIENTATION_HORIZONTAL
+
+                val dx = ev.x - initialX
+                val dy = ev.y - initialY
+
+                if (dx.absoluteValue > touchSlop || dy.absoluteValue > touchSlop) {
+                    val delta = if (isHorizontal) dx else dy
+                    parent.requestDisallowInterceptTouchEvent(canChildScroll(getBannerOptions().orientation, delta))
                 }
             }
             MotionEvent.ACTION_UP,
@@ -187,16 +207,25 @@ class BannerView @JvmOverloads constructor(
                 parent.requestDisallowInterceptTouchEvent(false)
             }
         }
-        return super.onInterceptTouchEvent(ev)
+    }
 
+    private fun canChildScroll(orientation: Int, delta: Float): Boolean {
+        val direction = -delta.sign.toInt()
+        return when (orientation) {
+            // Negative to check scrolling left, positive to check scrolling right.
+            ViewPager2.ORIENTATION_HORIZONTAL -> viewPager2.canScrollHorizontally(direction)
+            // Negative to check scrolling up, positive to check scrolling down.
+            ViewPager2.ORIENTATION_VERTICAL -> viewPager2.canScrollVertically(direction)
+            else -> false
+        }
     }
 
     //横向
     private fun horizontalCanSlide(lastIndex: Int, ev: MotionEvent): Boolean {
         val moveX = ev.x
         return when (viewPager2.currentItem) {
-            0 -> moveX - downX < 0
-            lastIndex -> moveX - downX > 0
+            0 -> moveX - initialX < 0
+            lastIndex -> moveX - initialX > 0
             else -> true
         }
     }
@@ -205,8 +234,8 @@ class BannerView @JvmOverloads constructor(
     private fun verticalCanSlide(lastIndex: Int, ev: MotionEvent): Boolean {
         val moveY = ev.y
         return when (viewPager2.currentItem) {
-            0 -> moveY - downY < 0
-            lastIndex -> moveY - downY > 0
+            0 -> moveY - initialY < 0
+            lastIndex -> moveY - initialY > 0
             else -> true
         }
     }

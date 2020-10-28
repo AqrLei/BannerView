@@ -54,11 +54,11 @@ class CircleDrawer(indicatorOptions: IndicatorOptions) : BaseDrawer(indicatorOpt
         val cx =
             maxWidth / 2 + (normalIndicatorWidth + indicatorOptions.indicatorGap) * currentPosition
         val left =
-            cx + (distance * (slideProgress - 0.5f) * 2.0f).coerceAtLeast(0f) - normalIndicatorWidth / 2
+            cx + (distance * (slideProgress - 0.5f) * 2.0f).coerceAtLeast(0f) - maxWidth / 2
         val right =
-            cx + (distance * slideProgress * 2.0f).coerceAtMost(distance) + normalIndicatorWidth / 2
-        rectF.set(left, 0f, right, normalIndicatorWidth)
-        canvas.drawRoundRect(rectF, normalIndicatorWidth, normalIndicatorWidth, mPaint)
+            cx + (distance * slideProgress * 2.0f).coerceAtMost(distance) + maxWidth / 2
+        rectF.set(left, 0f, right, maxWidth)
+        canvas.drawRoundRect(rectF, maxWidth, maxWidth, mPaint)
     }
 
     private fun drawCircle(canvas: Canvas, cx: Float, cy: Float, radius: Float) {

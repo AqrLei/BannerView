@@ -16,6 +16,6 @@ class SimpleBannerViewHolder(private val list: ArrayList<Int>) : BannerViewHolde
 
     override fun onBindView(position: Int, view: View) {
         view.tvBanner.setBackgroundColor(list[position])
-        view.tvBanner.text = "$position"
+        view.tvBanner.text = "${position+1}"
     }
 }

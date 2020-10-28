@@ -10,7 +10,9 @@
         style="@style/BannerStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:isAuto="true"
+        app:banner_indicator_slide_mode="WORM"
+        app:isAuto="false"
+        app:banner_can_loop="false"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup

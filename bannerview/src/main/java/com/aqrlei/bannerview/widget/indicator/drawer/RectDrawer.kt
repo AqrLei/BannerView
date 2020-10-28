@@ -75,7 +75,7 @@ open class RectDrawer internal constructor(indicatorOptions: IndicatorOptions) :
         for (position in 0 until pageSize) {
             val sliderWidth = if (isChecked(position)) maxWidth else minWidth
             mPaint.color = if (isChecked(position)) indicatorOptions.checkedColor else indicatorOptions.normalColor
-            val right = if (isChecked(position)) left + minWidth else left + maxWidth
+            val right = left + sliderWidth
             rectF.set(left, 0F, right, indicatorOptions.sliderHeight)
             drawRoundRect(canvas, indicatorOptions.sliderHeight, indicatorOptions.sliderHeight)
             left += sliderWidth +indicatorOptions.indicatorGap
