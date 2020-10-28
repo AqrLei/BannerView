@@ -1,6 +1,7 @@
 package com.aqrlei.bannerview.widget.transform
 
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 
 /**
@@ -8,7 +9,9 @@ import androidx.viewpager2.widget.ViewPager2
  */
 abstract class BasePageTransformer :
     ViewPager2.PageTransformer {
+    protected var isHorizontal = true
     final override fun transformPage(page: View, position: Float) {
+        isHorizontal = isHorizontal(page)
         onPreTransform(page, position)
         when {
             position < -1 -> onTransformOffScreenLeft(page, position)
@@ -23,4 +26,12 @@ abstract class BasePageTransformer :
     protected open fun onTransformMoveToLeft(page: View, position: Float) {}
     protected open fun onTransformMoveToRight(page: View, position: Float) {}
     protected open fun onTransformOffScreenRight(page: View, position: Float) {}
+
+    private fun isHorizontal(page: View): Boolean {
+        val parent = page.parent
+        val parentParent = parent?.parent
+        return if (parent is RecyclerView && parentParent is ViewPager2) {
+            parentParent.orientation == ViewPager2.ORIENTATION_HORIZONTAL
+        } else true
+    }
 }

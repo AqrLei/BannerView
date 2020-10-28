@@ -27,10 +27,15 @@ class DepthPageTransformer : BasePageTransformer() {
     override fun onTransformMoveToLeft(page: View, position: Float) {
         with(page) {
             alpha = 1f
-            translationX = 0f
+            if(isHorizontal){
+                translationX = 0F
+            }else {
+                translationY = 0F
+            }
+
             translationZ = 0f
-            scaleX = 1f
-            scaleY = 1f
+            scaleX = 1F
+            scaleY = 1F
         }
     }
 
@@ -40,8 +45,13 @@ class DepthPageTransformer : BasePageTransformer() {
             alpha = 1 - position
 
             // Counteract the default slide transition
-            pivotY = 0.5F * height
-            translationX = page.width * -position
+            if (isHorizontal) {
+                pivotY = 0.5F * height
+                translationX = page.width * -position
+            }else {
+                pivotX = 0.5f * width
+                translationY = page.height * -position
+            }
             // Move it behind the left page
             translationZ = -1f
 

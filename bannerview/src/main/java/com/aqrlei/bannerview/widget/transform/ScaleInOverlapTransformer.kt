@@ -14,7 +14,6 @@ import kotlin.math.max
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class ScaleInOverlapTransformer(private val minScale: Float = 0.85F) : BasePageTransformer() {
     override fun onPreTransform(page: View, position: Float) {
-        val isHorizontal = isHorizontal(page)
         with(page) {
             elevation = -abs(position)
             val scaleDelta = abs(position * 0.2F)
@@ -27,13 +26,5 @@ class ScaleInOverlapTransformer(private val minScale: Float = 0.85F) : BasePageT
                 translationY = if (position > 0) (-width * (1f - scale)) else (width * (1f - scale))
             }
         }
-    }
-
-    private fun isHorizontal(page: View): Boolean {
-        val parent = page.parent
-        val parentParent = parent?.parent
-        return if (parent is RecyclerView && parentParent is ViewPager2) {
-            parentParent.orientation == ViewPager2.ORIENTATION_HORIZONTAL
-        } else true
     }
 }

@@ -349,9 +349,12 @@ class BannerView @JvmOverloads constructor(
             if (null != marginPageTransformer) {
                 compositePageTransformer.removeTransformer(marginPageTransformer!!)
             }
-            marginPageTransformer = MarginPageTransformer(pageMargin)
 
-            compositePageTransformer.addTransformer(marginPageTransformer!!)
+            if (pageMargin > 0) {
+                marginPageTransformer = MarginPageTransformer(pageMargin)
+
+                compositePageTransformer.addTransformer(marginPageTransformer!!)
+            }
 
             refreshPageStyle()
 
@@ -392,9 +395,7 @@ class BannerView @JvmOverloads constructor(
                 null
             }
         }
-
         defaultPageTransformer?.let { compositePageTransformer.addTransformer(it) }
-
     }
 
     /**

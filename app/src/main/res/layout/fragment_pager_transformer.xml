@@ -40,8 +40,10 @@
 
     <RadioGroup
         android:id="@+id/rgPageStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/rgTransformerStyle"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -85,4 +87,39 @@
     </RadioGroup>
 
 
+    <RadioGroup
+        android:id="@+id/rgTransformerStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/rgPageStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/rgPageStyle">
+
+        <RadioButton
+            android:id="@+id/rbTStyle0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="NONE" />
+
+        <RadioButton
+            android:id="@+id/rbTStyle1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ACCORDION" />
+
+        <RadioButton
+            android:id="@+id/rbTStyle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DEPTH" />
+
+        <RadioButton
+            android:id="@+id/rbTStyle3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ZOOM_OUT" />
+
+    </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

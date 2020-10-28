@@ -11,10 +11,8 @@ import com.aqrlei.bannerview.widget.options.MIN_SCALE
 private const val CENTER_SCALE = 0.5F
 
 class ScaleInTransformer(private val minScale: Float = MIN_SCALE) : BasePageTransformer() {
-    private var isHorizontal: Boolean = true
 
     override fun onPreTransform(page: View, position: Float) {
-        isHorizontal = isHorizontal(page)
         with(page) {
             pivotY = height / 2F
             pivotX = width / 2F
@@ -70,13 +68,5 @@ class ScaleInTransformer(private val minScale: Float = MIN_SCALE) : BasePageTran
             scaleX = minScale
             scaleY = minScale
         }
-    }
-
-    private fun isHorizontal(page: View): Boolean {
-        val parent = page.parent
-        val parentParent = parent?.parent
-        return if (parent is RecyclerView && parentParent is ViewPager2) {
-            parentParent.orientation == ViewPager2.ORIENTATION_HORIZONTAL
-        } else true
     }
 }

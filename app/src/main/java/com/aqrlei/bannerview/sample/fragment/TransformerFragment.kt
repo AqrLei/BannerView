@@ -13,6 +13,9 @@ import com.aqrlei.bannerview.sample.R
 import com.aqrlei.bannerview.sample.holder.SimpleBannerViewHolder
 import com.aqrlei.bannerview.widget.BannerView
 import com.aqrlei.bannerview.widget.enums.PageTransformerStyle
+import com.aqrlei.bannerview.widget.transform.AccordionTransformer
+import com.aqrlei.bannerview.widget.transform.DepthPageTransformer
+import com.aqrlei.bannerview.widget.transform.ZoomOutPageTransformer
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_pager_transformer.*
 
@@ -133,6 +136,37 @@ class TransformerFragment : Fragment() {
             bvBanner.setBannerOptions {
                 orientation =
                     if (checkedId == R.id.rb1) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
+            }
+        }
+
+        val accordion = AccordionTransformer()
+        val depth = DepthPageTransformer()
+        val zoomOut  = ZoomOutPageTransformer()
+        rgTransformerStyle.setOnCheckedChangeListener { _, checkedId ->
+            when(checkedId) {
+                R.id.rbTStyle0 -> {
+                    bvBanner.removePageTransformer(depth)
+                    bvBanner.removePageTransformer(zoomOut)
+                    bvBanner.removePageTransformer(accordion)
+                }
+                R.id.rbTStyle1 -> {
+                    bvBanner.removePageTransformer(depth)
+                    bvBanner.removePageTransformer(zoomOut)
+                    bvBanner.removePageTransformer(accordion)
+                    bvBanner.addPageTransformer(accordion)
+                }
+                R.id.rbTStyle2 -> {
+                    bvBanner.removePageTransformer(depth)
+                    bvBanner.removePageTransformer(zoomOut)
+                    bvBanner.removePageTransformer(accordion)
+                    bvBanner.addPageTransformer(depth)
+                }
+                R.id.rbTStyle3 -> {
+                    bvBanner.removePageTransformer(depth)
+                    bvBanner.removePageTransformer(zoomOut)
+                    bvBanner.removePageTransformer(accordion)
+                    bvBanner.addPageTransformer(zoomOut)
+                }
             }
         }
     }
