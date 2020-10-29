@@ -671,11 +671,13 @@ class BannerView @JvmOverloads constructor(
 
         override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
             super.onAttachedToRecyclerView(recyclerView)
+            viewHolder.onAttachedToBannerView(this@BannerView)
             viewPager2.registerOnPageChangeCallback(internalPageChangeCallback)
         }
 
         override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
             super.onDetachedFromRecyclerView(recyclerView)
+            viewHolder.onDetachedFromBannerView(this@BannerView)
             viewPager2.unregisterOnPageChangeCallback(internalPageChangeCallback)
         }
 
