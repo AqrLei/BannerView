@@ -41,7 +41,10 @@ abstract class BannerViewHolder {
     abstract fun getListSize(): Int
 
     fun onCreateBannerView(parent: ViewGroup, viewType: Int): View {
-        return LayoutInflater.from(parent.context).inflate(getLayoutId(viewType), parent, false)
+        return LayoutInflater.from(parent.context).inflate(getLayoutId(viewType), parent, false).also {
+            // avoid ERROR: Pages must fill the whole ViewPager2 (use match_parent)
+            it.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
+        }
     }
 
     abstract fun onBindView(position: Int, view: View)

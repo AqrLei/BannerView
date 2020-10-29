@@ -18,8 +18,8 @@ ext {
             minSdkVersion     : 19,
             targetSdkVersion  : 30,
 
-            versionCode       : 1010000,
-            versionName       : "1.1.0",
+            versionCode       : 1010100,
+            versionName       : "1.1.1",
             groupId           : "com.aqrlei.lib",
             artifactId        : "bannerview",
             desc              : "android's ui widget",

@@ -72,37 +72,44 @@ class BannerView @JvmOverloads constructor(
 
     private val internalPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
-            bannerAdapter ?: return
-            val listSize = bannerAdapter!!.getListSize()
-            currentPosition = BannerUtils.getRealPosition2(isCanLoop, position, listSize)
-            indicatorView?.onPageSelected(currentPosition)
-            pageChangeCallback?.onPageSelected(currentPosition)
+            bannerAdapter?.let {
+                val listSize = it.getListSize()
+                currentPosition = BannerUtils.getRealPosition2(isCanLoop, position, listSize)
+                indicatorView?.onPageSelected(currentPosition)
+                pageChangeCallback?.onPageSelected(currentPosition)
+            }
         }
 
         override fun onPageScrollStateChanged(state: Int) {
-            bannerAdapter ?: return
-            if (ViewPager2.SCROLL_STATE_IDLE == state) {
-                needResetCurrentItem()
+            bannerAdapter?.let {
+                if (ViewPager2.SCROLL_STATE_IDLE == state) {
+                    needResetCurrentItem(it.getListSize())
+                }
+                indicatorView?.onPageScrollStateChanged(state)
+                pageChangeCallback?.onPageScrollStateChanged(state)
             }
-            indicatorView?.onPageScrollStateChanged(state)
-            pageChangeCallback?.onPageScrollStateChanged(state)
         }
 
         override fun onPageScrolled(
             position: Int, positionOffset: Float,
             positionOffsetPixels: Int
         ) {
-            bannerAdapter ?: return
-            val listSize = bannerAdapter!!.getListSize()
-            val realPosition = BannerUtils.getRealPosition2(isCanLoop, position, listSize)
+            bannerAdapter?.let {
+                val listSize = it.getListSize()
+                val realPosition = BannerUtils.getRealPosition2(isCanLoop, position, listSize)
 
-            if (listSize > 0) {
-                pageChangeCallback?.onPageScrolled(
-                    realPosition,
-                    positionOffset,
-                    positionOffsetPixels
-                )
-                indicatorView?.onPageScrolled(realPosition, positionOffset, positionOffsetPixels)
+                if (listSize > 0) {
+                    pageChangeCallback?.onPageScrolled(
+                        realPosition,
+                        positionOffset,
+                        positionOffsetPixels
+                    )
+                    indicatorView?.onPageScrolled(
+                        realPosition,
+                        positionOffset,
+                        positionOffsetPixels
+                    )
+                }
             }
         }
     }
@@ -168,43 +175,49 @@ class BannerView @JvmOverloads constructor(
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        bannerAdapter ?: return super.onInterceptTouchEvent(ev)
         handleInterceptTouchEvent(ev)
         return super.onInterceptTouchEvent(ev)
 
     }
 
     private fun handleInterceptTouchEvent(ev: MotionEvent?) {
-        val lastIndex = bannerAdapter!!.getListSize() - 1
-        val canIntercept = viewPager2.isUserInputEnabled || lastIndex > 0
+        bannerAdapter?.let {
+            val lastIndex = it.getListSize() - 1
+            val canIntercept = viewPager2.isUserInputEnabled || lastIndex > 0
 
-        if ((!canChildScroll(viewPager2.orientation, -1.0F)
-                    && !canChildScroll(viewPager2.orientation, 1.0F)) || !canIntercept
-        ) {
-            return
-        }
-
-        when (ev?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                initialX = ev.x
-                initialY = ev.y
-                parent.requestDisallowInterceptTouchEvent(lastIndex > 0)
+            if ((!canChildScroll(viewPager2.orientation, -1.0F)
+                        && !canChildScroll(viewPager2.orientation, 1.0F)) || !canIntercept
+            ) {
+                return
             }
-            MotionEvent.ACTION_MOVE -> {
-                val isHorizontal =
-                    getBannerOptions().orientation == ViewPager2.ORIENTATION_HORIZONTAL
 
-                val dx = ev.x - initialX
-                val dy = ev.y - initialY
-
-                if (dx.absoluteValue > touchSlop || dy.absoluteValue > touchSlop) {
-                    val delta = if (isHorizontal) dx else dy
-                    parent.requestDisallowInterceptTouchEvent(canChildScroll(getBannerOptions().orientation, delta))
+            when (ev?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    initialX = ev.x
+                    initialY = ev.y
+                    parent.requestDisallowInterceptTouchEvent(lastIndex > 0)
                 }
-            }
-            MotionEvent.ACTION_UP,
-            MotionEvent.ACTION_CANCEL -> {
-                parent.requestDisallowInterceptTouchEvent(false)
+                MotionEvent.ACTION_MOVE -> {
+                    val isHorizontal =
+                        getBannerOptions().orientation == ViewPager2.ORIENTATION_HORIZONTAL
+
+                    val dx = ev.x - initialX
+                    val dy = ev.y - initialY
+
+                    if (dx.absoluteValue > touchSlop || dy.absoluteValue > touchSlop) {
+                        val delta = if (isHorizontal) dx else dy
+                        parent.requestDisallowInterceptTouchEvent(
+                            canChildScroll(
+                                getBannerOptions().orientation,
+                                delta
+                            )
+                        )
+                    }
+                }
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_CANCEL -> {
+                    parent.requestDisallowInterceptTouchEvent(false)
+                }
             }
         }
     }
@@ -304,26 +317,27 @@ class BannerView @JvmOverloads constructor(
     }
 
     fun setCurrentItem(item: Int) {
-        bannerAdapter ?: return
-        stopAutoLoop()
-        val checkCanLoop = isCanLoop && bannerAdapter!!.getListSize() > 1
-        val index = if (checkCanLoop) getLoopItemIndex(item) else item
-        viewPager2.currentItem = index
-        startAutoLoop()
+        bannerAdapter?.let {
+            stopAutoLoop()
+            val checkCanLoop = isCanLoop && it.getListSize() > 1
+            val index = if (checkCanLoop) getLoopItemIndex(item, it.getListSize()) else item
+            viewPager2.currentItem = index
+            startAutoLoop()
+        }
     }
 
     fun setCurrentItem(item: Int, smoothScroll: Boolean) {
-        bannerAdapter ?: return
-        stopAutoLoop()
-        val checkCanLoop = isCanLoop && bannerAdapter!!.getListSize() > 1
-        val index = if (checkCanLoop) getLoopItemIndex(item) else item
-        viewPager2.setCurrentItem(index, smoothScroll)
-        startAutoLoop()
+        bannerAdapter?.let {
+            stopAutoLoop()
+            val checkCanLoop = isCanLoop && it.getListSize() > 1
+            val index = if (checkCanLoop) getLoopItemIndex(item, it.getListSize()) else item
+            viewPager2.setCurrentItem(index, smoothScroll)
+            startAutoLoop()
+        }
     }
 
-    private fun getLoopItemIndex(item: Int): Int {
+    private fun getLoopItemIndex(item: Int, listSize: Int): Int {
         val currentItem = viewPager2.currentItem
-        val listSize = bannerAdapter!!.getListSize()
         val realPosition =
             BannerUtils.getRealPosition2(isCanLoop, currentItem, listSize)
 
@@ -359,41 +373,40 @@ class BannerView @JvmOverloads constructor(
      * 设置viewPager2的属性
      */
     private fun setupViewPager2() {
-        bannerAdapter ?: return
-        with(viewPager2) {
-            orientation = getBannerOptions().orientation
-            offscreenPageLimit = getBannerOptions().offsetPageLimit
-            val pageMargin = getBannerOptions().pageMargin.toInt()
-            (getChildAt(0) as? RecyclerView)?.apply {
-                val paddingStart = getBannerOptions().startRevealWidth.toInt() + pageMargin
-                val paddingEnd = getBannerOptions().endRevealWidth.toInt() + pageMargin
-                if (getBannerOptions().orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
-                    setPadding(paddingStart, 0, paddingEnd, 0)
-                } else {
-                    setPadding(0, paddingStart, 0, paddingEnd)
+        bannerAdapter?.let { bAdapter ->
+            with(viewPager2) {
+                orientation = getBannerOptions().orientation
+                offscreenPageLimit = getBannerOptions().offsetPageLimit
+                val pageMargin = getBannerOptions().pageMargin.toInt()
+                (getChildAt(0) as? RecyclerView)?.apply {
+                    val paddingStart = getBannerOptions().startRevealWidth.toInt() + pageMargin
+                    val paddingEnd = getBannerOptions().endRevealWidth.toInt() + pageMargin
+                    if (getBannerOptions().orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
+                        setPadding(paddingStart, 0, paddingEnd, 0)
+                    } else {
+                        setPadding(0, paddingStart, 0, paddingEnd)
+                    }
+                    clipToPadding = false
                 }
-                clipToPadding = false
-            }
-            adapter = bannerAdapter
+                adapter = bannerAdapter
 
-            if (null != marginPageTransformer) {
-                compositePageTransformer.removeTransformer(marginPageTransformer!!)
-            }
+                marginPageTransformer?.let { compositePageTransformer.removeTransformer(it) }
 
-            if (pageMargin > 0) {
-                marginPageTransformer = MarginPageTransformer(pageMargin)
+                if (pageMargin > 0) {
+                    marginPageTransformer = MarginPageTransformer(pageMargin).also {
+                        compositePageTransformer.addTransformer(it)
+                    }
+                }
 
-                compositePageTransformer.addTransformer(marginPageTransformer!!)
-            }
+                refreshPageStyle()
 
-            refreshPageStyle()
+                setPageTransformer(compositePageTransformer)
 
-            setPageTransformer(compositePageTransformer)
+                val checkCanLoop = isCanLoop && bAdapter.getListSize() > 1
 
-            val checkCanLoop = isCanLoop && bannerAdapter!!.getListSize() > 1
-
-            if (checkCanLoop) {
-                setCurrentItem(bannerAdapter!!.getOriginalPosition(), false)
+                if (checkCanLoop) {
+                    setCurrentItem(bAdapter.getOriginalPosition(), false)
+                }
             }
         }
     }
@@ -495,18 +508,20 @@ class BannerView @JvmOverloads constructor(
      * 自动轮播处理
      */
     private fun handlePosition() {
-        bannerAdapter ?: return
-        if (bannerAdapter!!.getListSize() > 1) {
-            viewPager2.currentItem = viewPager2.currentItem + 1
-            postDelayed(runnable, interval.toLong())
+        bannerAdapter?.let {
+            if (it.getListSize() > 1) {
+                viewPager2.currentItem = viewPager2.currentItem + 1
+                postDelayed(runnable, interval.toLong())
+            }
         }
     }
 
     private fun startAutoLoop() {
-        bannerAdapter ?: return
-        if (!isLooping && isAutoPlay && bannerAdapter!!.getListSize() > 1) {
-            postDelayed(runnable, interval.toLong())
-            isLooping = true
+        bannerAdapter?.let {
+            if (!isLooping && isAutoPlay && it.getListSize() > 1) {
+                postDelayed(runnable, interval.toLong())
+                isLooping = true
+            }
         }
     }
 
@@ -521,21 +536,21 @@ class BannerView @JvmOverloads constructor(
      * 数据变化通知刷新
      */
     fun notifyDataSetChanged(diffCallback: DiffUtil.Callback? = null) {
-        bannerAdapter ?: return
-        stopAutoLoop()
-        if (null != diffCallback) {
-            val result = DiffUtil.calculateDiff(diffCallback)
-            result.dispatchUpdatesTo(bannerAdapter!!)
-        } else {
-            bannerAdapter!!.notifyDataSetChanged()
+        bannerAdapter?.let {
+            stopAutoLoop()
+            if (null != diffCallback) {
+                val result = DiffUtil.calculateDiff(diffCallback)
+                result.dispatchUpdatesTo(it)
+            } else {
+                it.notifyDataSetChanged()
+            }
+            resetCurrentItem(currentPosition)
+            refreshIndicator()
+            startAutoLoop()
         }
-        resetCurrentItem(currentPosition)
-        refreshIndicator()
-        startAutoLoop()
     }
 
-    private fun needResetCurrentItem() {
-        val listSize = bannerAdapter!!.getListSize()
+    private fun needResetCurrentItem(listSize: Int) {
         val position = viewPager2.currentItem
         val curPosition = BannerUtils.getRealPosition2(isCanLoop, position, listSize)
         val needResetCurrentItem =
@@ -549,11 +564,12 @@ class BannerView @JvmOverloads constructor(
      * 自动轮播到临界值或数据更新，重新设置当前位置page
      */
     private fun resetCurrentItem(item: Int) {
-        bannerAdapter ?: return
-        if (isCanLoop && bannerAdapter!!.getListSize() > 1) {
-            viewPager2.setCurrentItem(bannerAdapter!!.getOriginalPosition() + item, false)
-        } else {
-            viewPager2.setCurrentItem(item, false)
+        bannerAdapter?.let {
+            if (isCanLoop && it.getListSize() > 1) {
+                viewPager2.setCurrentItem(it.getOriginalPosition() + item, false)
+            } else {
+                viewPager2.setCurrentItem(item, false)
+            }
         }
     }
 
@@ -561,14 +577,16 @@ class BannerView @JvmOverloads constructor(
      * Indicator
      */
     private fun refreshIndicator() {
-        setIndicatorValues()
-        getIndicatorOptions().currentPosition =
-            BannerUtils.getRealPosition2(
-                isCanLoop,
-                viewPager2.currentItem,
-                bannerAdapter!!.getListSize()
-            )
-        updateIndicator()
+        bannerAdapter?.let {
+            setIndicatorValues()
+            getIndicatorOptions().currentPosition =
+                BannerUtils.getRealPosition2(
+                    isCanLoop,
+                    viewPager2.currentItem,
+                    it.getListSize()
+                )
+            updateIndicator()
+        }
     }
 
     private fun updateIndicator() {
