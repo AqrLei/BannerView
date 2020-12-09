@@ -1,7 +1,7 @@
 BannerView
 =====
-[![License](./images/license.svg)](https://github.com/AqrLei/BannerView/blob/master/LICENSE)
-![MinSdk](./images/minsdk.svg)
+[![License](https://img.shields.io/badge/License-Apache2.0-brightgreen?style=flat)](https://github.com/AqrLei/BannerView/blob/master/LICENSE)
+![MinSdk](https://img.shields.io/badge/API-19%2B-brightgreen?style=flat)
 [![](https://jitpack.io/v/AqrLei/BannerView.svg)](https://jitpack.io/#AqrLei/BannerView)
 
 
