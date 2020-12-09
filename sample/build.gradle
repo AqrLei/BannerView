@@ -35,6 +35,6 @@ dependencies {
     androidTestImplementation deps.android.junit_ext
     androidTestImplementation deps.android.espresso
 
-    implementation project(":bannerview")
+    implementation "com.github.AqrLei:BannerView:1.0.2"
 
 }

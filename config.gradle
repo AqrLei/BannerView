@@ -9,6 +9,9 @@ ext {
             url 'https://dl.bintray.com/aqrlei/lib'
         }
         handler.maven {
+            url 'https://jitpack.io'
+        }
+        handler.maven {
             url './repo'
         }
     }
