@@ -1,0 +1,11 @@
+com.aqrlei.bannerview.widget
+com.aqrlei.bannerview.widget.enums
+com.aqrlei.bannerview.widget.indicator
+com.aqrlei.bannerview.widget.indicator.base
+com.aqrlei.bannerview.widget.indicator.drawer
+com.aqrlei.bannerview.widget.indicator.enums
+com.aqrlei.bannerview.widget.indicator.options
+com.aqrlei.bannerview.widget.manager
+com.aqrlei.bannerview.widget.options
+com.aqrlei.bannerview.widget.transform
+com.aqrlei.bannerview.widget.utils

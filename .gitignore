@@ -86,3 +86,4 @@ lint/tmp/
 
 repo/
 .idea/
+!apk/sample-debug.apk
