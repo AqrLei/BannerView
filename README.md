@@ -1,7 +1,7 @@
 BannerView
 =====
-[![License]](./images/license.svg)
-[![MinSdk]](./images/minsdk.svg)
+[![License](./images/license.svg)](https://github.com/AqrLei/BannerView/blob/master/LICENSE)
+![MinSdk](./images/minsdk.svg)
 [![](https://jitpack.io/v/AqrLei/BannerView.svg)](https://jitpack.io/#AqrLei/BannerView)
 
 
