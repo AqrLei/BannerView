@@ -39,7 +39,7 @@ Sample usage
 A sample project which provides runnable code examples that demonstrate uses of the classes in this 
 project is available in the `sample/` folder
 
-- [Demo](./apk/sample-debug.apk)
+- [Demo](./apk/sample.apk)
 
 
 Preview
