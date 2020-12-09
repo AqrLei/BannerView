@@ -3,6 +3,8 @@ BannerView
 [![License](https://img.shields.io/badge/License-Apache2.0-brightgreen?style=flat)](https://github.com/AqrLei/BannerView/blob/master/LICENSE)
 ![MinSdk](https://img.shields.io/badge/API-19%2B-brightgreen?style=flat)
 [![](https://jitpack.io/v/AqrLei/BannerView.svg)](https://jitpack.io/#AqrLei/BannerView)
+[![Stars](https://img.shields.io/github/stars/AqrLei/BannerView)](https://github.com/AqrLei/BannerView/stargazers)
+
 
 
 
