@@ -25,6 +25,7 @@ import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL
 import kotlin.math.absoluteValue
 import kotlin.math.sign
+import kotlin.math.tan
 
 /**
  * Layout to wrap a scrollable component inside a ViewPager2. Provided as a solution to the problem
@@ -70,24 +71,41 @@ class NestedViewPager2ScrollableHost : FrameLayout {
             return
         }
 
-        if (e.action == MotionEvent.ACTION_DOWN) {
-            initialX = e.x
-            initialY = e.y
-            parent.requestDisallowInterceptTouchEvent(true)
-        } else if (e.action == MotionEvent.ACTION_MOVE) {
-            val dx = e.x - initialX
-            val dy = e.y - initialY
-            val isVpHorizontal = child!!.orientation == ORIENTATION_HORIZONTAL
+        when(e.action){
+            MotionEvent.ACTION_DOWN -> {
+                initialX = e.x
+                initialY = e.y
+                parent.requestDisallowInterceptTouchEvent(true)
+            }
 
-            if (dx.absoluteValue > touchSlop || dy.absoluteValue > touchSlop) {
-                // Gesture is parallel, query child if movement in that direction is possible
-                if (canChildScroll(child!!.orientation, if (isVpHorizontal) dx else dy)) {
-                    // Child can scroll, disallow all parents to intercept
-                    parent.requestDisallowInterceptTouchEvent(true)
-                } else {
-                    // Child cannot scroll, allow all parents to intercept
-                    parent.requestDisallowInterceptTouchEvent(false)
+            MotionEvent.ACTION_MOVE -> {
+                val dx = e.x - initialX
+                val dy = e.y - initialY
+                val absDx = dx.absoluteValue
+                val absDy = dy.absoluteValue
+                // x/y 滑过的距离绝对值 比大于tan30时 才归类为横向滑动
+                val isSlideHorizontal = absDx / (absDy.takeIf { deltaY -> deltaY > 0F }
+                    ?: 1.0F) > tan(30.00)
+                val isVpHorizontal = child!!.orientation == ORIENTATION_HORIZONTAL
+
+                when{
+                    isVpHorizontal && isSlideHorizontal && absDx > touchSlop -> {
+                        parent.requestDisallowInterceptTouchEvent(
+                            canChildScroll(child!!.orientation, dx)
+                        )
+                    }
+
+                    !isVpHorizontal && !isSlideHorizontal && absDy > touchSlop -> {
+                        parent.requestDisallowInterceptTouchEvent(
+                            canChildScroll(child!!.orientation, dy)
+                        )
+                    }
+
+                    else -> {
+                        parent.requestDisallowInterceptTouchEvent(false)
+                    }
                 }
+
             }
         }
     }

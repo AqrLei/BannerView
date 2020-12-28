@@ -30,6 +30,7 @@ import com.aqrlei.bannerview.widget.transform.ScaleInTransformer
 import com.aqrlei.bannerview.widget.utils.BannerUtils
 import kotlin.math.absoluteValue
 import kotlin.math.sign
+import kotlin.math.tan
 
 /**
  * created by AqrLei on 2020/4/23
@@ -198,20 +199,34 @@ class BannerView @JvmOverloads constructor(
                     parent.requestDisallowInterceptTouchEvent(lastIndex > 0)
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    val isHorizontal =
-                        getBannerOptions().orientation == ViewPager2.ORIENTATION_HORIZONTAL
+                    val isHorizontal = getBannerOptions().orientation == ViewPager2.ORIENTATION_HORIZONTAL
 
                     val dx = ev.x - initialX
                     val dy = ev.y - initialY
+                    val absDx = dx.absoluteValue
+                    val absDy = dx.absoluteValue
 
-                    if (dx.absoluteValue > touchSlop || dy.absoluteValue > touchSlop) {
-                        val delta = if (isHorizontal) dx else dy
-                        parent.requestDisallowInterceptTouchEvent(
-                            canChildScroll(
-                                getBannerOptions().orientation,
-                                delta
+                    // x/y 滑过的距离绝对值 比大于tan30时 才归类为横向滑动
+                    val isSlideHorizontal = absDx / (absDy.takeIf { deltaY -> deltaY > 0F }
+                        ?: 1.0F) > tan(30.00)
+
+                    when {
+                        isHorizontal && isSlideHorizontal && absDx > touchSlop -> { // 属于横向滑动
+                            parent.requestDisallowInterceptTouchEvent(
+                                canChildScroll(getBannerOptions().orientation, dx)
                             )
-                        )
+                        }
+
+                        !isHorizontal && !isSlideHorizontal && absDy > touchSlop -> { // 属于纵向滑动
+                            parent.requestDisallowInterceptTouchEvent(
+                                canChildScroll(getBannerOptions().orientation, dy)
+                            )
+                        }
+
+                        else -> {
+                            parent.requestDisallowInterceptTouchEvent(false)
+                        }
+
                     }
                 }
                 MotionEvent.ACTION_UP,
