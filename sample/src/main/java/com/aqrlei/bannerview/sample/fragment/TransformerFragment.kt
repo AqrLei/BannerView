@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.sample.R
@@ -18,7 +19,6 @@ import com.aqrlei.bannerview.widget.transform.AccordionTransformer
 import com.aqrlei.bannerview.widget.transform.DepthPageTransformer
 import com.aqrlei.bannerview.widget.transform.ZoomOutPageTransformer
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_pager_transformer.*
 
 /**
  * created by AqrLei on 2020/10/20
@@ -57,6 +57,11 @@ class TransformerFragment : Fragment() {
             5F,
             this.resources.displayMetrics
         )
+        val bvBanner = view.findViewById<BannerView>(R.id.bvBanner)
+        val rgPageStyle = view.findViewById<RadioGroup>(R.id.rgPageStyle)
+        val rgPageOrientation = view.findViewById<RadioGroup>(R.id.rgPageOrientation)
+        val rgTransformerStyle = view.findViewById<RadioGroup>(R.id.rgTransformerStyle)
+
         with(bvBanner) {
             pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {

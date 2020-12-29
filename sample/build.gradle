@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-
 android {
     compileSdkVersion app.compileSdkVersion
     
@@ -46,6 +44,7 @@ dependencies {
     androidTestImplementation deps.android.junit_ext
     androidTestImplementation deps.android.espresso
 
-    implementation "com.github.AqrLei:BannerView:1.0.2"
+//    implementation "com.github.AqrLei:BannerView:1.0.3"
+    implementation project(":bannerview")
 
 }

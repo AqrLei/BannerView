@@ -6,15 +6,13 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.NestedScrollView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.sample.R
-import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
+import com.aqrlei.bannerview.widget.indicator.IndicatorView
 import com.aqrlei.bannerview.widget.indicator.enums.IndicatorStyle
-import kotlinx.android.synthetic.main.fragment_pager_home.*
-import kotlinx.android.synthetic.main.layout_banner_item.view.*
 
 /**
  * created by AqrLei on 2020/10/20
@@ -43,6 +41,8 @@ class HomeFragment : Fragment() {
             3F,
             this.context!!.resources.displayMetrics
         )
+        val viewPager2 = view.findViewById<ViewPager2>(R.id.viewPager2)
+
         viewPager2.adapter = object : RecyclerView.Adapter<ItemViewHolder>() {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
                 return ItemViewHolder(
@@ -52,12 +52,14 @@ class HomeFragment : Fragment() {
             }
 
             override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-                holder.itemView.tvBanner.setBackgroundColor(bannerItemArray[position])
-                holder.itemView.tvBanner.text = "${position+1}"
+                val tvBanner = holder.itemView.findViewById<TextView>(R.id.tvBanner)
+                tvBanner.setBackgroundColor(bannerItemArray[position])
+                tvBanner.text = "${position+1}"
             }
 
             override fun getItemCount(): Int = bannerItemArray.size
         }
+        val  indicatorBottom = view.findViewById<IndicatorView>(R.id.indicatorBottom)
         indicatorBottom.setupWithViewPager2(viewPager2) {
             indicatorStyle = IndicatorStyle.ROUND_RECT
             normalIndicatorWidth = dp3 * 2

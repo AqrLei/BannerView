@@ -204,7 +204,7 @@ class BannerView @JvmOverloads constructor(
                     val dx = ev.x - initialX
                     val dy = ev.y - initialY
                     val absDx = dx.absoluteValue
-                    val absDy = dx.absoluteValue
+                    val absDy = dy.absoluteValue
 
                     // x/y 滑过的距离绝对值 比大于tan30时 才归类为横向滑动
                     val isSlideHorizontal = absDx / (absDy.takeIf { deltaY -> deltaY > 0F }
@@ -212,15 +212,13 @@ class BannerView @JvmOverloads constructor(
 
                     when {
                         isHorizontal && isSlideHorizontal && absDx > touchSlop -> { // 属于横向滑动
-                            parent.requestDisallowInterceptTouchEvent(
-                                canChildScroll(getBannerOptions().orientation, dx)
-                            )
+                            val request =  canChildScroll(getBannerOptions().orientation, dx)
+                            parent.requestDisallowInterceptTouchEvent(request)
                         }
 
                         !isHorizontal && !isSlideHorizontal && absDy > touchSlop -> { // 属于纵向滑动
-                            parent.requestDisallowInterceptTouchEvent(
-                                canChildScroll(getBannerOptions().orientation, dy)
-                            )
+                            val request = canChildScroll(getBannerOptions().orientation, dy)
+                            parent.requestDisallowInterceptTouchEvent(request)
                         }
 
                         else -> {

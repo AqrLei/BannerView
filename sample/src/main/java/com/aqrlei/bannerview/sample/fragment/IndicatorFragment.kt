@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.sample.R
@@ -18,7 +19,6 @@ import com.aqrlei.bannerview.widget.indicator.FigureIndicatorView
 import com.aqrlei.bannerview.widget.indicator.enums.IndicatorSlideMode
 import com.aqrlei.bannerview.widget.indicator.enums.IndicatorStyle
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_pager_indicator.*
 import kotlin.random.Random
 
 /**
@@ -47,6 +47,15 @@ class IndicatorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val bvBanner = view.findViewById<BannerView>(R.id.bvBanner)
+        val btnAdd = view.findViewById<View>(R.id.btnAdd)
+        val btnRemove = view.findViewById<View>(R.id.btnRemove)
+        val btnSet = view.findViewById<View>(R.id.btnSet)
+        val rgIndicatorCustom = view.findViewById<RadioGroup>(R.id.rgIndicatorCustom)
+        val rgIndicatorVisibility = view.findViewById<RadioGroup>(R.id.rgIndicatorVisibility)
+        val rgIndicator = view.findViewById<RadioGroup>(R.id.rgIndicator)
+        val rgIndicatorStyle = view.findViewById<RadioGroup>(R.id.rgIndicatorStyle)
+        val rgIndicatorShape = view.findViewById<RadioGroup>(R.id.rgIndicatorShape)
         with(bvBanner) {
             pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
