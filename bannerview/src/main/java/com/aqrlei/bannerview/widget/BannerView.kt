@@ -183,7 +183,6 @@ class BannerView @JvmOverloads constructor(
 
     }
 
-    //TODO
     private fun handleInterceptTouchEvent(ev: MotionEvent?) {
         bannerAdapter?.let {
             val lastIndex = it.getListSize() - 1
@@ -214,13 +213,11 @@ class BannerView @JvmOverloads constructor(
 
                     when {
                         isHorizontal && isSlideHorizontal && absDx > touchSlop -> { // 属于横向滑动
-                            val request = canHorizontalScroll(dx)
-                            parent.requestDisallowInterceptTouchEvent(request)
+                            parent.requestDisallowInterceptTouchEvent(canHorizontalScroll(dx))
                         }
 
                         !isHorizontal && !isSlideHorizontal && absDy > touchSlop -> { // 属于纵向滑动
-                            val request = canVerticalScroll(dy)
-                            parent.requestDisallowInterceptTouchEvent(request)
+                            parent.requestDisallowInterceptTouchEvent(canVerticalScroll(dy))
                         }
 
                         else -> {
@@ -408,7 +405,6 @@ class BannerView @JvmOverloads constructor(
             }
         }
     }
-
 
     fun removePageTransformer(pageTransformer: ViewPager2.PageTransformer?) {
         pageTransformer?.let { compositePageTransformer.removeTransformer(pageTransformer) }
