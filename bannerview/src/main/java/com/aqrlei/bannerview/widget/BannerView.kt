@@ -3,6 +3,7 @@ package com.aqrlei.bannerview.widget
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
@@ -46,6 +47,7 @@ class BannerView @JvmOverloads constructor(
 
         //无限轮播时，设置的item数目
         var MAX_VALUE = 500
+        var debugEnable:Boolean = false
     }
 
     private val bannerManager: BannerManager = BannerManager()
@@ -187,9 +189,7 @@ class BannerView @JvmOverloads constructor(
             val lastIndex = it.getListSize() - 1
             val canIntercept = viewPager2.isUserInputEnabled || lastIndex > 0
 
-            if ((!canChildScroll(viewPager2.orientation, -1.0F)
-                        && !canChildScroll(viewPager2.orientation, 1.0F)) || !canIntercept
-            ) {
+            if (!canIntercept) {
                 return
             }
 
@@ -197,6 +197,7 @@ class BannerView @JvmOverloads constructor(
                 MotionEvent.ACTION_DOWN -> {
                     initialX = ev.x
                     initialY = ev.y
+                    debugLog("lastIndex = $lastIndex")
                     parent.requestDisallowInterceptTouchEvent(lastIndex > 0)
                 }
                 MotionEvent.ACTION_MOVE -> {
@@ -209,21 +210,22 @@ class BannerView @JvmOverloads constructor(
 
                     val isSlideHorizontal = absDx > absDy
 
+                    debugLog("dx=$dx, dy=$dy, isHorizontal=$isHorizontal")
+
                     when {
                         isHorizontal && isSlideHorizontal && absDx > touchSlop -> { // 属于横向滑动
-                            val request =  canChildScroll(getBannerOptions().orientation, dx)
+                            val request = canHorizontalScroll(dx)
                             parent.requestDisallowInterceptTouchEvent(request)
                         }
 
                         !isHorizontal && !isSlideHorizontal && absDy > touchSlop -> { // 属于纵向滑动
-                            val request = canChildScroll(getBannerOptions().orientation, dy)
+                            val request = canVerticalScroll(dy)
                             parent.requestDisallowInterceptTouchEvent(request)
                         }
 
                         else -> {
                             parent.requestDisallowInterceptTouchEvent(false)
                         }
-
                     }
                 }
                 MotionEvent.ACTION_UP,
@@ -234,15 +236,19 @@ class BannerView @JvmOverloads constructor(
         }
     }
 
-    private fun canChildScroll(orientation: Int, delta: Float): Boolean {
+    private fun canHorizontalScroll(delta: Float): Boolean {
+        // Negative to check scrolling left, positive to check scrolling right.
         val direction = -delta.sign.toInt()
-        return when (orientation) {
-            // Negative to check scrolling left, positive to check scrolling right.
-            ViewPager2.ORIENTATION_HORIZONTAL -> viewPager2.canScrollHorizontally(direction)
-            // Negative to check scrolling up, positive to check scrolling down.
-            ViewPager2.ORIENTATION_VERTICAL -> viewPager2.canScrollVertically(direction)
-            else -> false
-        }
+        val result = viewPager2.canScrollHorizontally(direction)
+        debugLog("horizontal: direction=$direction, result=$result")
+        return result
+    }
+    private fun canVerticalScroll(delta: Float): Boolean {
+        // Negative to check scrolling up, positive to check scrolling down.
+        val direction = -delta.sign.toInt()
+        val result = viewPager2.canScrollVertically(direction)
+        debugLog("vertical: direction=$direction, result=$result")
+        return result
     }
 
     /**
@@ -662,6 +668,11 @@ class BannerView @JvmOverloads constructor(
         constraintSet.applyTo(indicatorLayout)
     }
 
+    private fun debugLog(message: String){
+        if (debugEnable){
+            Log.d(TAG, message)
+        }
+    }
     /**
      * OnPageClickCallback
      */

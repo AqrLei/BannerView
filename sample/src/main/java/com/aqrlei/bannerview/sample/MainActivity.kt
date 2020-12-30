@@ -8,6 +8,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.aqrlei.bannerview.sample.fragment.HomeFragment
 import com.aqrlei.bannerview.sample.fragment.IndicatorFragment
 import com.aqrlei.bannerview.sample.fragment.TransformerFragment
+import com.aqrlei.bannerview.widget.BannerView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        BannerView.debugEnable = true
         val pager  = findViewById<ViewPager2>(R.id.pager)
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         pager.adapter = object : FragmentStateAdapter(this) {
