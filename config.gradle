@@ -6,13 +6,7 @@ ext {
         handler.jcenter()
         handler.mavenCentral()
         handler.maven {
-            url 'https://dl.bintray.com/aqrlei/lib'
-        }
-        handler.maven {
             url 'https://jitpack.io'
-        }
-        handler.maven {
-            url './repo'
         }
     }
 
@@ -20,16 +14,6 @@ ext {
             compileSdkVersion : 30,
             minSdkVersion     : 19,
             targetSdkVersion  : 30,
-
-            versionCode       : 1010100,
-            versionName       : "1.1.1",
-            groupId           : "com.aqrlei.lib",
-            artifactId        : "bannerview",
-            desc              : "android's ui widget",
-            url               : "https://github.com/AqrLei/BannerView",
-            vcsUrl            : "https://github.com/AqrLei/BannerView.git",
-            connection        : "scm:git:git://github.com:AqrLei/BannerView.git",
-            dveloperConnection: "scm:git:ssh://github.com:AqrLei/BannerView.git",
     ]
 
     android = [

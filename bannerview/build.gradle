@@ -36,3 +36,5 @@ dependencies {
     implementation deps.android.constraintlayout
 
 }
+
+apply from: rootProject.file("gradle/bintray_upload.gradle")

@@ -1,4 +1,3 @@
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 apply plugin: 'org.jetbrains.dokka'
 
@@ -32,26 +31,17 @@ tasks.withType(Javadoc) {//防止编码问题
     options.addStringOption('charSet', 'UTF-8')
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
                 from components.release
-                groupId app.groupId
-                artifactId app.artifactId
-                version app.versionName
 
                 artifact(sourcesJar)
                 artifact(dokkaJar)
 
                 pom {
-                    name = app.artifactId
                     packaging 'aar'
-                    description = app.desc
-                    url = app.url
                     licenses {
                         license {
                             name = 'The Apache License, Version 2.0'
@@ -65,11 +55,6 @@ afterEvaluate {
                             email = 'aqrdeveloper@gmail.com'
                         }
                     }
-                    scm {
-                        connection = app.connection
-                        developerConnection = app.developerConnection
-                        url = app.url
-                    }
                 }
             }
 
@@ -78,32 +63,6 @@ afterEvaluate {
         repositories {
             maven {
                 url = "$rootProject.rootDir/repo"
-            }
-        }
-    }
-
-    bintray {
-        user = properties.getProperty("bintray.user")
-        key = properties.getProperty("bintray.key")
-        publications = ['release']
-
-        override = true
-        publish = true //[Default: false] Whether version should be auto published after an upload
-
-        pkg {
-            repo = "lib"
-            name = app.artifactId
-            licenses = ['Apache-2.0']
-            websiteUrl = app.url
-            vcsUrl = app.vcsUrl
-
-            publicDownloadNumbers = true
-
-            version {
-                name = app.versionName
-                desc = app.versionName
-                released = new Date()
-                vcsTag = app.versionName
             }
         }
     }
