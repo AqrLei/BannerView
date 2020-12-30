@@ -84,8 +84,7 @@ class NestedViewPager2ScrollableHost : FrameLayout {
                 val absDx = dx.absoluteValue
                 val absDy = dy.absoluteValue
                 // x/y 滑过的距离绝对值 比大于tan30时 才归类为横向滑动
-                val isSlideHorizontal = absDx / (absDy.takeIf { deltaY -> deltaY > 0F }
-                    ?: 1.0F) > tan(30.00)
+                val isSlideHorizontal = absDx > absDy
                 val isVpHorizontal = child!!.orientation == ORIENTATION_HORIZONTAL
 
                 when{

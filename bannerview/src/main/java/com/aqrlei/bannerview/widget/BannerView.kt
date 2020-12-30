@@ -181,6 +181,7 @@ class BannerView @JvmOverloads constructor(
 
     }
 
+    //TODO
     private fun handleInterceptTouchEvent(ev: MotionEvent?) {
         bannerAdapter?.let {
             val lastIndex = it.getListSize() - 1
@@ -206,9 +207,7 @@ class BannerView @JvmOverloads constructor(
                     val absDx = dx.absoluteValue
                     val absDy = dy.absoluteValue
 
-                    // x/y 滑过的距离绝对值 比大于tan30时 才归类为横向滑动
-                    val isSlideHorizontal = absDx / (absDy.takeIf { deltaY -> deltaY > 0F }
-                        ?: 1.0F) > tan(30.00)
+                    val isSlideHorizontal = absDx > absDy
 
                     when {
                         isHorizontal && isSlideHorizontal && absDx > touchSlop -> { // 属于横向滑动
@@ -243,26 +242,6 @@ class BannerView @JvmOverloads constructor(
             // Negative to check scrolling up, positive to check scrolling down.
             ViewPager2.ORIENTATION_VERTICAL -> viewPager2.canScrollVertically(direction)
             else -> false
-        }
-    }
-
-    //横向
-    private fun horizontalCanSlide(lastIndex: Int, ev: MotionEvent): Boolean {
-        val moveX = ev.x
-        return when (viewPager2.currentItem) {
-            0 -> moveX - initialX < 0
-            lastIndex -> moveX - initialX > 0
-            else -> true
-        }
-    }
-
-    // 纵向
-    private fun verticalCanSlide(lastIndex: Int, ev: MotionEvent): Boolean {
-        val moveY = ev.y
-        return when (viewPager2.currentItem) {
-            0 -> moveY - initialY < 0
-            lastIndex -> moveY - initialY > 0
-            else -> true
         }
     }
 
