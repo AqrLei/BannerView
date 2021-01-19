@@ -1,6 +1,6 @@
 apply plugin: 'maven-publish'
 apply plugin: 'org.jetbrains.dokka'
-apply plugin: 'signing'
+//apply plugin: 'signing'
 
 dokka {
     outputFormat = "javadoc"
@@ -67,7 +67,7 @@ afterEvaluate {
             }
         }
     }
-    signing {
-        sign publishing.publications.release
-    }
+//    signing {
+//        sign publishing.publications.release
+//    }
 }
