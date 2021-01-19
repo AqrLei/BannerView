@@ -1,5 +1,6 @@
 apply plugin: 'maven-publish'
 apply plugin: 'org.jetbrains.dokka'
+apply plugin: 'signing'
 
 dokka {
     outputFormat = "javadoc"
@@ -65,5 +66,8 @@ afterEvaluate {
                 url = "$rootProject.rootDir/repo"
             }
         }
+    }
+    signing {
+        sign publishing.publications.release
     }
 }
