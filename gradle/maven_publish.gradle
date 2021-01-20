@@ -37,6 +37,9 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
+                groupId REPO_GROUP_NAME
+                artifactId ARTIFACT_NAME
+                version VERSION_NAME
 
                 artifact(sourcesJar)
                 artifact(dokkaJar)

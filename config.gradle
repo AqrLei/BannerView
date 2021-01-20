@@ -27,16 +27,6 @@ ext {
             material        : "com.google.android.material:material:1.2.1",
     ]
 
-    aqrlei = [
-            litelog         : "com.aqrlei.lib:litelog:1.0.1",
-            litecache       : "com.aqrlei.lib:litecache:1.0.0",
-            litedraw        : "com.aqrlei.lib:litedraw:1.0.0",
-            litenet         : "com.aqrlei.lib:litenet:1.0.0",
-            bannerview      : "com.aqrlei.lib:bannerview:1.0.0",
-            utilcollection  : "com.aqrlei.lib:utilcollection:1.0.0",
-            widgetcollection: "com.aqrlei.lib:widgetcollection:1.0.0",
-    ]
-
     junit = "junit:junit:4.12"
 
 
@@ -62,7 +52,6 @@ ext {
 
     deps = [
             android: android,
-            aqrlei : aqrlei,
             gson   : "com.google.code.gson:gson:2.8.6",
             junit  : junit,
             kotlin : kotlin,
