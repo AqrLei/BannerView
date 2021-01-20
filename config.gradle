@@ -37,10 +37,6 @@ ext {
             widgetcollection: "com.aqrlei.lib:widgetcollection:1.0.0",
     ]
 
-    bintray = [
-            plugin: "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5",
-    ]
-
     junit = "junit:junit:4.12"
 
 

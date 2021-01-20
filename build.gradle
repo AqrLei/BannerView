@@ -6,7 +6,6 @@ buildscript {
         classpath deps.android.plugin
         classpath deps.kotlin.plugin
         classpath deps.kotlin.dokka_plugin
-        classpath bintray.plugin
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
