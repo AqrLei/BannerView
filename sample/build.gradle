@@ -24,15 +24,16 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation deps.kotlin.stdlib
-    implementation deps.android.ktx
-    implementation deps.android.appcompat
-    implementation deps.android.constraintlayout
-    implementation deps.android.viewpager2
-    implementation deps.android.material
-    testImplementation deps.junit
-    androidTestImplementation deps.android.junit_ext
-    androidTestImplementation deps.android.espresso
+    implementation Libs.kotlin.stdlib
+    implementation Libs.android.core_ktx
+    implementation Libs.android.appcompat
+    implementation Libs.android.constraintLayout
+    implementation Libs.android.viewPager2
+    implementation Libs.android.material
+    testImplementation Libs.junit
+    androidTestImplementation Libs.android.juint_ext
+
+    androidTestImplementation Libs.android.espresso
 
     implementation project(":bannerview")
 
