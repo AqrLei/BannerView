@@ -1,6 +1,8 @@
+import groovy.transform.Field
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 
-fun addRepos(handler: RepositoryHandler) {
+
+val addRepos = { handler: RepositoryHandler ->
     handler.google()
     handler.jcenter()
     handler.mavenCentral()
@@ -14,7 +16,7 @@ object App {
 }
 
 object Versions {
-    const val android_gradle_plugin = "4.1.1"
+    const val android_gradle_plugin = "4.1.3"
     const val appcompat = "1.2.0"
     const val core_ktx = "1.3.1"
     const val constraintLayout = "1.1.3"
@@ -31,7 +33,7 @@ object Versions {
     const val viewpager2 = "1.0.0"
 }
 
- object Android {
+object Android {
     const val plugin = "com.android.tools.build:gradle:${Versions.android_gradle_plugin}"
     const val core_ktx = "androidx.core:core-ktx:${Versions.core_ktx}"
     const val appcompat = "androidx.appcompat:appcompat:${Versions.appcompat}"
@@ -50,17 +52,12 @@ object Kotlin {
     const val dokka_plugin = "org.jetbrains.dokka:dokka-gradle-plugin:${Versions.dokka_plugin}"
     const val plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
-    const val coroutine ="org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlin_coroutine}"
+    const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlin_coroutine}"
 
 }
 
 object Libs {
-
     val android = Android
-
     const val junit = "junit:junit:4.12"
-
     val kotlin = Kotlin
-
-
 }

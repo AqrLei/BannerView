@@ -1,3 +1,0 @@
-include ':bannerview'
-include ':sample'
-rootProject.name = "BannerView"
