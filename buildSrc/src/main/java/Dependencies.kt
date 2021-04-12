@@ -1,4 +1,3 @@
-import groovy.transform.Field
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 
 
@@ -18,16 +17,15 @@ object App {
 object Versions {
     const val android_gradle_plugin = "4.1.3"
     const val appcompat = "1.2.0"
-    const val core_ktx = "1.3.1"
-    const val constraintLayout = "1.1.3"
+    const val core_ktx = "1.3.2"
+    const val constraintLayout = "2.0.1"
 
     const val dokka_plugin = "0.10.1"
 
-    const val espresso = "3.2.0"
+    const val espresso = "3.3.0"
     const val junit_ext = "1.1.1"
 
-    const val kotlin = "1.4.21"
-    const val kotlin_coroutine = "1.4.2"
+    const val kotlin = "1.4.32"
 
     const val material = "1.2.1"
     const val viewpager2 = "1.0.0"
@@ -52,8 +50,6 @@ object Kotlin {
     const val dokka_plugin = "org.jetbrains.dokka:dokka-gradle-plugin:${Versions.dokka_plugin}"
     const val plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
-    const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlin_coroutine}"
-
 }
 
 object Libs {
